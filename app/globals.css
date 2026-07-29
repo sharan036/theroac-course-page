@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+:root {
+  --color-cream: #f2f1ee;
+  --color-orange: #ff6f00;
+  --color-ink: #000000;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+}
+
+@theme inline {
+  --color-cream: var(--color-cream);
+  --color-orange: var(--color-orange);
+  --font-sans: var(--font-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #000000;
+  font-family: var(--font-sans);
+}
+
+.marquee-track {
+  animation: marquee 28s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

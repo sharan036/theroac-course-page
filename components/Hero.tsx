@@ -1,0 +1,438 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import Reveal from "./Reveal";
+
+const headshots = [
+  "https://framerusercontent.com/images/GvIIYiCvs1fSYrsqT9kkYqRv4Y.jpg",
+  "https://framerusercontent.com/images/LS4ISV3lMw5erPxQJs6QzAYUmU.jpg",
+  "https://framerusercontent.com/images/km3kZvwQj1ex1UnSfYsIR0bRQ.png",
+  "https://framerusercontent.com/images/fVdbJJ2MWbfO3uSvWyvr0pmMb0M.png",
+];
+
+const typingMessages = [
+  "Summarize these meeting notes.",
+  "Write a cold LinkedIn outreach message.",
+  "Create a high-converting sales page headline.",
+  "Generate a week's worth of LinkedIn posts.",
+];
+const TIMER_DURATION = 20 * 60 * 1000;
+
+// ----------------------------------------------------
+// Cookie Helpers
+// ----------------------------------------------------
+
+const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+
+  if (parts.length === 2) {
+    return parts.pop()?.split(";").shift();
+  }
+
+  return null;
+};
+
+const setCookie = (name: string, value: string, days = 7) => {
+  const date = new Date();
+
+  date.setTime(date.getTime() + days * 86400000);
+
+  document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
+};
+
+// ----------------------------------------------------
+
+export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+  const [messageIndex, setMessageIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({
+    minutes: "20",
+    seconds: "00",
+  });
+
+  useEffect(() => {
+    setMounted(true);
+
+    let expiresAt: number;
+
+    const createTimer = () => {
+      const time = Date.now() + TIMER_DURATION;
+
+      setCookie("offerTimer", String(time));
+
+      return time;
+    };
+
+    const savedTimer = getCookie("offerTimer");
+
+    if (savedTimer) {
+      expiresAt = Number(savedTimer);
+
+      if (Date.now() >= expiresAt) {
+        expiresAt = createTimer();
+      }
+    } else {
+      expiresAt = createTimer();
+    }
+
+    const updateTimer = () => {
+      const remaining = expiresAt - Date.now();
+
+      if (remaining <= 0) {
+        expiresAt = createTimer();
+        return;
+      }
+
+      const minutes = Math.floor(
+        (remaining / (1000 * 60)) % 60
+      );
+
+      const seconds = Math.floor(
+        (remaining / 1000) % 60
+      );
+
+      setTimeLeft({
+        minutes: String(minutes).padStart(2, "0"),
+        seconds: String(seconds).padStart(2, "0"),
+      });
+    };
+
+    updateTimer();
+
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const currentMessage = typingMessages[messageIndex];
+    let timeout: NodeJS.Timeout;
+    // Typing speed
+    const typingSpeed = 55;
+    // Delete speed
+    const deletingSpeed = 30;
+    // Pause when completed
+    const pauseTime = 1500;
+
+    if (!isDeleting) {
+      if (displayText.length < currentMessage.length) {
+        timeout = setTimeout(() => {
+          setDisplayText(
+            currentMessage.slice(0, displayText.length + 1)
+          );
+        }, typingSpeed);
+      } else {
+        timeout = setTimeout(() => {
+          setIsDeleting(true);
+        }, pauseTime);
+      }
+    } else {
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayText(
+            currentMessage.slice(0, displayText.length - 1)
+          );
+        }, deletingSpeed);
+      } else {
+        setIsDeleting(false);
+
+        setMessageIndex((prev) =>
+          (prev + 1) % typingMessages.length
+        );
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, messageIndex]);
+
+  return (
+    <header className="relative overflow-hidden bg-black pt-[150px] pb-10 px-4">
+
+      {/* BACKGROUND TEXTURE */}
+
+      <div className="absolute inset-0 -z-30">
+        <Image
+          src="https://framerusercontent.com/images/GGNg8KoV9Iwu1Z89UqqLzdQWx0.png"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-90"
+        />
+      </div>
+
+      {/* GRID */}
+
+      <div className="absolute inset-0 -z-20 opacity-40">
+        <Image
+          src="https://framerusercontent.com/images/I5BmrodulLElK3MtIcR7Z5YD8bI.svg"
+          alt=""
+          fill
+          className="object-cover"
+        />
+      </div>
+
+      {/* SPOTLIGHTS */}
+
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-52 top-0 h-[700px] w-[450px] rotate-[35deg] bg-white/5 blur-[120px]" />
+        <div className="absolute left-1/3 top-0 h-[700px] w-[350px] rotate-[45deg] bg-white/5 blur-[120px]" />
+        <div className="absolute right-1/3 top-0 h-[700px] w-[350px] -rotate-[45deg] bg-white/5 blur-[120px]" />
+        <div className="absolute -right-52 top-0 h-[700px] w-[450px] -rotate-[35deg] bg-white/5 blur-[120px]" />
+      </div>
+
+      <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-16">
+
+        {/* HERO CONTENT */}
+
+        <div className="flex w-full max-w-[840px] flex-col items-center gap-8">
+
+          {/* TIMER */}
+
+          <Reveal
+            duration={600}
+            direction="up"
+            className="flex items-center rounded-md bg-white p-[2px]"
+          >
+            <div className="rounded bg-black px-3 py-2">
+              <span className="text-xs font-medium text-white">
+                Limited seats — Cohort closes in
+              </span>
+            </div>
+
+            <div className="px-3">
+              <span className="font-mono text-sm text-black">
+                {mounted
+                  ? `${timeLeft.minutes} : ${timeLeft.seconds}`
+                  : "20 : 00"}
+              </span>
+            </div>
+          </Reveal>
+
+          {/* HEADING */}
+
+          <Reveal delay={100} duration={800}>
+
+            <h1
+              className="
+              text-center
+              text-[54px]
+              font-semibold
+              leading-[0.95]
+              tracking-[-0.04em]
+              text-white
+              md:text-[64px]
+            "
+            >
+              Go From Zero Code to One Live{" "}
+              <span className="text-[#ff6f00]">AI SaaS Product in 30 Days.</span>
+            </h1>
+          </Reveal>
+
+          {/* PROMPT BOX */}
+          <Reveal
+            delay={180}
+            duration={800}
+            className="w-full"
+          >
+            <div
+              className="
+              rounded-[15px]
+              border
+              border-white/30
+              bg-black/20
+              px-7
+              py-6
+              backdrop-blur-sm
+            "
+            >
+              <p
+                className="
+                mb-12
+                min-h-[70px]
+                text-[28px]
+                font-medium
+                text-white
+                md:text-[32px]
+              "
+              >
+                {displayText}
+
+                <span className="animate-pulse text-white">
+                  |
+                </span>
+              </p>
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-6">
+
+                  <button className="text-3xl text-white">
+                    +
+                  </button>
+
+                  <button className="flex items-center gap-2 text-white">
+                    <span>⚙</span>
+                    <span>Tools</span>
+                  </button>
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <span className="text-white">
+                    🎤
+                  </span>
+
+                  <div className="grid h-11 w-11 place-items-center rounded-full bg-white/20">
+
+                    <div className="flex gap-[2px]">
+                      <div className="h-2 w-1 rounded bg-white" />
+                      <div className="h-4 w-1 rounded bg-white" />
+                      <div className="h-3 w-1 rounded bg-white" />
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </Reveal>
+
+          {/* CTA + SOCIAL PROOF */}
+
+          <Reveal
+            delay={280}
+            duration={800}
+            className="flex flex-col items-center gap-6 lg:flex-row"
+          >
+            <a
+              href="#pricing"
+              className="
+              flex items-center gap-4 rounded-lg
+              bg-[#FF6F00]
+              py-2 pr-2 pl-6
+              text-lg font-medium text-white
+              shadow-[inset_0_4px_10px_rgba(255,255,255,0.15)]
+              transition-all duration-200
+              hover:scale-[1.02]
+            "
+            >
+              Book My Seat
+
+              <span className="grid h-12 w-12 place-items-center rounded-md bg-white text-[#FF6F00]">
+                →
+              </span>
+            </a>
+
+            <div className="flex items-center gap-5">
+
+              <div className="flex">
+
+                {headshots.map((src, i) => (
+                  <div
+                    key={src}
+                    className="
+                    relative
+                    -ml-3
+                    h-12
+                    w-12
+                    overflow-hidden
+                    rounded-full
+                    border-2
+                    border-white
+                    first:ml-0
+                  "
+                    style={{
+                      zIndex: headshots.length - i,
+                    }}
+                  >
+                    <Image
+                      src={src}
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+
+              </div>
+
+              <p
+                className="
+                max-w-[220px]
+                text-xs
+                uppercase
+                leading-tight
+                text-neutral-200
+                font-['Gloria_Hallelujah']
+              "
+              >
+                2k+ professionals are already ahead of you.
+              </p>
+
+            </div>
+          </Reveal>
+        </div>
+
+        {/* VIDEO PLAYER */}
+
+        <Reveal
+          direction="none"
+          duration={900}
+          className="
+          relative
+          aspect-video
+          w-full
+          max-w-[1200px]
+          overflow-hidden
+          rounded-2xl
+          border
+          border-white/30
+          bg-black
+        "
+        >
+          <Image
+            src="https://framerusercontent.com/images/Z2DiO6dZ026J28WbfMPgC380w.png"
+            alt="Course Preview"
+            fill
+            className="object-cover"
+          />
+
+          <div className="absolute inset-0 grid place-items-center">
+
+            <button
+              aria-label="Play"
+              className="
+              grid
+              h-20
+              w-20
+              place-items-center
+              rounded-full
+              bg-[#FF6F00]/80
+              backdrop-blur-lg
+              transition
+              hover:scale-110
+            "
+            >
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="white"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+
+          </div>
+        </Reveal>
+
+      </div>
+    </header>
+  );
+}

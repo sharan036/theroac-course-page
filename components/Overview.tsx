@@ -1,15 +1,15 @@
 const points = [
   {
-    title: "DAILY DELIVERABLES",
-    desc: "Ship something real every day \u2014 30 GitHub commits, not 30 videos watched.",
+    title: "LIVE, NOT RECORDED",
+    desc: "Live 2-hour sessions on Wed/Sat/Sun — real-time building, real-time feedback, not another pre-recorded course.",
   },
   {
-    title: "FULL STACK, NOT A DEMO",
-    desc: "Go from raw JavaScript to a production Next.js app with real auth, a real database, and real payments.",
+    title: "ONE CAPSTONE, BUILT ALL MONTH",
+    desc: "You pick your product idea in Session 1 and build it, session by session, into a real demoable AI product by Session 13.",
   },
   {
-    title: "PRODUCTION AI FEATURES",
-    desc: "Learn OpenAI, Claude, streaming, and RAG the way real AI products use them \u2014 not toy notebook examples.",
+    title: "NO CODE, REAL AI",
+    desc: "Connect ChatGPT and Claude to your app, build a chatbot, and even teach AI your own documents — without writing a line of code.",
   },
 ];
 
@@ -18,9 +18,10 @@ export default function Overview() {
     <section className="bg-black px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
-          <p className="text-sm font-medium text-neutral-400">Introducing the ROAC Method</p>
+          <p className="text-sm font-medium text-neutral-400">Introducing the No-Code AI Method</p>
           <h2 className="max-w-[830px] text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl md:text-[38px]">
-            The Day-by-Day System for <span className="text-[#ff6f00]">Shipping a Real AI SaaS</span>
+            A Live, Session-by-Session System for{" "}
+            <span className="text-[#ff6f00]">Shipping a Real AI Product</span>
           </h2>
         </div>
 
@@ -31,10 +32,7 @@ export default function Overview() {
                 Get Ahead
               </span>
               <h3 className="text-2xl font-medium leading-tight text-white sm:text-[23px]">
-                A 30-day, no-fluff build plan for working professionals and self-taught developers.
-                Every single day tells you exactly what to build, how long it should take, and
-                what &ldquo;done&rdquo; looks like &mdash; so you ship something real before you
-                sleep, every night, for 30 nights straight.
+                Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window. No prior coding experience required. Every session builds directly on your own capstone idea, so by Session 13 you're not demoing a class exercise — you're demoing your own working AI product
               </h3>
               <a
                 href="#pricing"
@@ -77,8 +75,9 @@ export default function Overview() {
         {/* testimonial */}
         <blockquote className="mx-auto mt-12 flex max-w-[1040px] flex-col items-center gap-4 rounded-xl border border-white/10 bg-neutral-950/40 p-8 text-center backdrop-blur">
           <p className="max-w-[600px] text-lg text-white sm:text-xl">
-            "I used the Day 20 RAG build to pitch a real client project the same week. This
-            course didn't just teach me AI APIs — it got me my first paid gig."
+            &quot;I&apos;d never built anything before this. By the final session I had a working
+            chatbot connected to my own documents, and I stress-tested it myself in front of the
+            class.&quot;
           </p>
           <div className="mt-2 flex flex-col items-center">
             <p className="text-white">Course Graduate</p>

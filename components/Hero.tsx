@@ -12,10 +12,11 @@ const headshots = [
 ];
 
 const typingMessages = [
-  "Summarize these meeting notes.",
-  "Write a cold LinkedIn outreach message.",
-  "Create a high-converting sales page headline.",
-  "Generate a week's worth of LinkedIn posts.",
+  "Answer this question using only my documents.",
+  "Turn ChatGPT into a chatbot for my customers.",
+  "Summarize these meeting notes automatically.",
+  "Add an AI feature that improves this text.",
+  "Teach my AI assistant to remember our chats."
 ];
 const TIMER_DURATION = 20 * 60 * 1000;
 
@@ -227,11 +228,17 @@ export default function Hero() {
               md:text-[64px]
             "
             >
-              Go From Zero Code to One Live{" "}
-              <span className="text-[#ff6f00]">AI SaaS Product in 30 Days.</span>
+              Build & Ship a Real AI Product in{" "}
+              <span className="text-[#ff6f00]">30 Days — No Code Required.</span>
             </h1>
           </Reveal>
-
+          <Reveal delay={140} duration={800}>
+            <p className="max-w-[640px] text-center text-base text-neutral-200 sm:text-lg">
+              Live sessions, Wed / Sat / Sun, 2 hours each. From picking your idea to a working,
+              demoable AI product — using no-code app builders, no-code AI integration, and no-code
+              automation. Built for working professionals with limited weekly time.
+            </p>
+          </Reveal>
           {/* PROMPT BOX */}
           <Reveal
             delay={180}
@@ -372,9 +379,8 @@ export default function Hero() {
                 font-['Gloria_Hallelujah']
               "
               >
-                2k+ professionals are already ahead of you.
+                Every cohort ships real, working AI products — zero code written.
               </p>
-
             </div>
           </Reveal>
         </div>

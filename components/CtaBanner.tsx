@@ -1,9 +1,9 @@
 import Image from "next/image";
 
 const benefits = [
-  "30 Days of Career-Oriented Building",
-  "Learn by Shipping, Not Watching",
-  "Lifetime Access with All Future Updates",
+  "30-Day Live Program",
+  "Live Building, Not Passive Watching",
+  "One Real AI Product Shipped",
 ];
 
 export default function CtaBanner() {
@@ -21,17 +21,18 @@ export default function CtaBanner() {
               key={i}
               className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white"
             >
-              <Image src={src} alt="Student" fill className="object-cover" />
+              <Image src={src} alt="Builder" fill className="object-cover" />
             </div>
           ))}
         </div>
 
         <h2 className="max-w-[700px] text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-          Book My Seat &amp; <span className="text-[#ff6f00]">Start Shipping Tonight</span>
+          Book My Seat & <span className="text-[#ff6f00]">Start Building Your AI Product</span>
         </h2>
-        <p className="max-w-[500px] text-sm text-neutral-500">
-          Graduates walk away with a live AI SaaS product, a verified certificate, and a
-          portfolio case study — built one daily deliverable at a time.
+        <p className="max-w-[560px] text-sm text-neutral-500">
+          Graduates walk away with a real, working AI product, demoed live, plus a first-hand
+          answer to where no-code stops working for their idea — built session by session, no
+          code required.
         </p>
 
         <a

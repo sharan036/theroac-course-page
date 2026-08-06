@@ -4,28 +4,28 @@ import { useState } from "react";
 
 const faqs = [
   {
-    q: "How much time do I need each day?",
-    a: "Plan for 6\u20139 focused hours a day, 30 days straight. Some days (like Day 25, 26, and 30) run longer because they're full project-build days. The one rule of the course: if a day's deliverable isn't done, you don't start the next day until it is.",
+    q: "Do I need any coding experience?",
+    a: "No. This course is built entirely around no-code tools — app builders, Airtable/Google Sheets, no-code AI plugins, and automation platforms like Zapier and Make. If you can use a spreadsheet, you can follow along.",
   },
   {
-    q: "Do I need any coding background to start?",
-    a: "You need to be comfortable installing software and following instructions. Day 1 starts from JavaScript fundamentals \u2014 variables, functions, and arrow functions \u2014 so no prior AI or React experience is required. Basic comfort with a terminal helps.",
+    q: "What's the actual time commitment?",
+    a: "Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window, plus light homework between sessions — a few hours a week, not a daily grind. It's designed for working professionals with limited weekly time.",
   },
   {
-    q: "What makes this different from free YouTube tutorials?",
-    a: "Every day has one deliverable you must ship and commit to GitHub before you sleep \u2014 not a video to passively watch. By Day 30 you have one continuous, live AI SaaS product with real auth, a real database, real AI features, and real payments, not 30 disconnected demos.",
-  },
-  {
-    q: "Can I pause if life gets busy?",
-    a: "Yes \u2014 the workbook is self-paced and yours for life, but the daily-shipping habit is the core mechanic of the course, so we recommend running the 30 days as close to back-to-back as your schedule allows for the best results.",
-  },
-  {
-    q: "Will I get future updates to the curriculum for free?",
-    a: "Yes, all future updates, new bonus prompts, and additional projects added to the workbook are included at no extra cost for all enrolled builders.",
+    q: "Are the sessions live or pre-recorded?",
+    a: "Live. Every session is a real-time build with the mentor and the cohort — you'll get feedback in the moment, not just a video to watch alone.",
   },
   {
     q: "What do I actually walk away with?",
-    a: "A live AI SaaS product covering JavaScript, Node/Express, PostgreSQL, React, Next.js, Clerk auth, OpenAI, Claude, RAG, Stripe, and Razorpay \u2014 plus a TheROAC Verified certificate and a portfolio case study you can show in interviews.",
+    a: "One real, working, demoable AI product that you scope in Session 1 and build session by session — plus a first-hand, tested understanding of exactly where no-code stops working for your specific idea.",
+  },
+  {
+    q: "Which tools will I use?",
+    a: "A no-code app builder (Bubble/Glide/Adalo), Airtable or Google Sheets for data, ChatGPT and Claude via no-code plugins, a conversational AI tool (Voiceflow/Botpress/Chatbase), a no-code RAG tool (Chatbase/Stack AI/VectorShift), and an automation platform (Zapier/Make/n8n).",
+  },
+  {
+    q: "What if I miss a live session?",
+    a: "Recordings are available so you don't fall behind, but because each session builds on your own capstone, we recommend attending live whenever possible to get real-time feedback.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function FAQ() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-6 text-center">
-          <p className="text-neutral-400">Still got questions? Reach out — we&apos;re here to help</p>
+          <p className="text-neutral-400">Still got questions? Reach out — we&apos;re here to help.</p>
           <a
             href="#"
             className="flex items-center gap-3 rounded-lg bg-[#ff6f00] py-1 pr-2 pl-4 text-sm font-medium text-white"

@@ -1,10 +1,10 @@
 const stats = [
-  { title: "30/30 — Daily Deliverables", desc: "Every day ends with something shipped and committed to GitHub \u2014 not just watched." },
-  { title: "4 Phases — One Continuous Build", desc: "JS \u2192 React/Next.js \u2192 AI \u2192 Monetization, all inside a single, growing product." },
-  { title: "9 Real Builds — Portfolio-Ready Projects", desc: "Including a Notes app, a RAG document Q&A tool, an AI Resume Reviewer, and an AI Content Generator." },
-  { title: "2 AI Providers — OpenAI + Claude Fluency", desc: "Learn to build an AI abstraction layer that can swap models with one environment variable." },
-  { title: "2 Payment Rails — Global + Local Monetization", desc: "Ship Stripe for card payments and Razorpay/UPI for Indian users in the same product." },
-  { title: "1 — Live AI SaaS at the Finish Line", desc: "Capstone day ships a landing page, a demo video, and a case study \u2014 ready to show in interviews." },
+  { title: "100% — Live Sessions, Not Recordings", desc: "Every session is live — Wed/Sat/Sun, 2 hours each — with real-time building and feedback." },
+  { title: "5 Weeks — One Continuous Capstone Build", desc: "Foundations → App Builder Mastery → AI Layer → Automation & Launch, all inside your own product." },
+  { title: "1 Capstone — A Real, Demoable AI Product", desc: "Not a class exercise — the product you scope in Session 1 is the one you demo in Session 13." },
+  { title: "4 AI Tools — No-Code AI Fluency", desc: "ChatGPT, Claude, no-code RAG tools, and conversational AI builders — connected without writing code." },
+  { title: "2 Automations — Real Workflow Automation", desc: "A two-tool connection and a full end-to-end automation, both built and tested live." },
+  { title: "1 Stress-Test — Know Your Limits, First-Hand", desc: "A dedicated exercise where you break your own build and learn exactly where no-code stops working for you." },
 ];
 
 export default function WhyChooseUs() {
@@ -14,7 +14,7 @@ export default function WhyChooseUs() {
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
           <p className="text-sm font-medium text-neutral-500">Why choose us?</p>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-            The <span className="text-[#ff6f00]">Deliverables</span> Speak for Themselves
+            A <span className="text-[#ff6f00]">Real Product</span> Speaks for Itself
           </h2>
         </div>
 

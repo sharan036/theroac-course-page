@@ -24,7 +24,7 @@ export default function Home() {
       <Curriculum />
       <WhyChooseUs />
       <Testimonials />
-      {/* <Pricing /> */}
+      <Pricing />
       <IsThisForYou />
       <Mentor />
       <Community />

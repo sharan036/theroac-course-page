@@ -403,39 +403,11 @@ export default function Hero() {
         "
         >
           <Image
-            src="https://framerusercontent.com/images/Z2DiO6dZ026J28WbfMPgC380w.png"
+            src="https://storage.googleapis.com/heartfelt-6a946.firebasestorage.app/theROAC/Building%20AI%20Products.png"
             alt="Course Preview"
             fill
             className="object-cover"
           />
-
-          <div className="absolute inset-0 grid place-items-center">
-
-            <button
-              aria-label="Play"
-              className="
-              grid
-              h-20
-              w-20
-              place-items-center
-              rounded-full
-              bg-[#FF6F00]/80
-              backdrop-blur-lg
-              transition
-              hover:scale-110
-            "
-            >
-              <svg
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
-
-          </div>
         </Reveal>
 
       </div>

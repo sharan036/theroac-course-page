@@ -44,11 +44,14 @@ const setCookie = (name: string, value: string, days = 30) => {
 
 const INITIAL_SEATS = 19;
 const MIN_SEATS = 1;
-const BATCH_DATE = "20 Aug 2026";
-const EARLY_DROP_MIN_DELAY_MS = 15 * 1000;  // 15s
-const EARLY_DROP_MAX_DELAY_MS = 45 * 1000;  // 45s
-const EARLY_DROP_PROBABILITY = 0.6; // 60% of visitors see one drop
+const BATCH_DATE = "20 Aug 2025";
+
+const EARLY_DROP_MIN_DELAY_MS = 15 * 1000;
+const EARLY_DROP_MAX_DELAY_MS = 45 * 1000;
+const EARLY_DROP_PROBABILITY = 0.6;
+
 const BASELINE_INTERVAL_MS = 8 * 60 * 1000;
+const RESET_HOLD_MS = 5 * 60 * 1000; 
 
 export default function Hero() {
   const [messageIndex, setMessageIndex] = useState(0);
@@ -57,42 +60,40 @@ export default function Hero() {
   const [seatsLeft, setSeatsLeft] = useState(INITIAL_SEATS);
 
   useEffect(() => {
-    let firstVisit: number;
+    const startNewCycle = (now: number) => {
+      const baseSeats = INITIAL_SEATS;
+      const willDrop = Math.random() < EARLY_DROP_PROBABILITY;
+      const earlyDropAt = willDrop
+        ? now +
+          EARLY_DROP_MIN_DELAY_MS +
+          Math.random() * (EARLY_DROP_MAX_DELAY_MS - EARLY_DROP_MIN_DELAY_MS)
+        : null;
+
+      setCookie("cycleStartAt", String(now));
+      setCookie("baseSeats", String(baseSeats));
+      setCookie("earlyDropAt", earlyDropAt ? String(Math.round(earlyDropAt)) : "none");
+      setCookie("hitMinAt", "none");
+
+      return { cycleStartAt: now, baseSeats, earlyDropAt };
+    };
+
+    let cycleStartAt: number;
     let baseSeats: number;
     let earlyDropAt: number | null;
 
-    const savedFirstVisit = getCookie("firstVisitAt");
+    const savedCycleStartAt = getCookie("cycleStartAt");
     const savedBaseSeats = getCookie("baseSeats");
     const savedEarlyDropAt = getCookie("earlyDropAt");
 
-    if (savedFirstVisit) {
-      firstVisit = Number(savedFirstVisit);
-    } else {
-      firstVisit = Date.now();
-      setCookie("firstVisitAt", String(firstVisit));
-    }
-
-    if (savedBaseSeats) {
+    if (savedCycleStartAt && savedBaseSeats && savedEarlyDropAt) {
+      cycleStartAt = Number(savedCycleStartAt);
       baseSeats = Number(savedBaseSeats);
-    } else {
-      baseSeats = INITIAL_SEATS;
-      setCookie("baseSeats", String(baseSeats));
-    }
-
-    if (savedEarlyDropAt) {
       earlyDropAt = savedEarlyDropAt === "none" ? null : Number(savedEarlyDropAt);
     } else {
-      const willDrop = Math.random() < EARLY_DROP_PROBABILITY;
-      if (willDrop) {
-        earlyDropAt =
-          firstVisit +
-          EARLY_DROP_MIN_DELAY_MS +
-          Math.random() * (EARLY_DROP_MAX_DELAY_MS - EARLY_DROP_MIN_DELAY_MS);
-        setCookie("earlyDropAt", String(Math.round(earlyDropAt)));
-      } else {
-        earlyDropAt = null;
-        setCookie("earlyDropAt", "none");
-      }
+      const fresh = startNewCycle(Date.now());
+      cycleStartAt = fresh.cycleStartAt;
+      baseSeats = fresh.baseSeats;
+      earlyDropAt = fresh.earlyDropAt;
     }
 
     const computeSeats = () => {
@@ -102,14 +103,40 @@ export default function Hero() {
         seats -= 1;
       }
 
-      const baselineStart = earlyDropAt ?? firstVisit;
+      const baselineStart = earlyDropAt ?? cycleStartAt;
       if (now > baselineStart) {
         const elapsed = now - baselineStart;
         const dropped = Math.floor(elapsed / BASELINE_INTERVAL_MS);
         seats -= dropped;
       }
-      setSeatsLeft(Math.max(MIN_SEATS, seats));
+
+      const clamped = Math.max(MIN_SEATS, seats);
+
+      // Track when we first hit MIN_SEATS, and reset after the hold period
+      if (clamped === MIN_SEATS) {
+        const savedHitMinAt = getCookie("hitMinAt");
+
+        if (!savedHitMinAt || savedHitMinAt === "none") {
+          setCookie("hitMinAt", String(now));
+          setSeatsLeft(MIN_SEATS);
+          return;
+        }
+
+        const hitMinAt = Number(savedHitMinAt);
+
+        if (now - hitMinAt >= RESET_HOLD_MS) {
+          const fresh = startNewCycle(now);
+          cycleStartAt = fresh.cycleStartAt;
+          baseSeats = fresh.baseSeats;
+          earlyDropAt = fresh.earlyDropAt;
+          setSeatsLeft(baseSeats);
+          return;
+        }
+      }
+
+      setSeatsLeft(clamped);
     };
+
     computeSeats();
     const interval = setInterval(computeSeats, 5 * 1000);
     return () => clearInterval(interval);

@@ -5,7 +5,7 @@ const points = [
   },
   {
     title: "ONE CAPSTONE, BUILT ALL MONTH",
-    desc: "You pick your product idea in Session 1 and build it, session by session, into a real demoable AI product by Session 13.",
+    desc: "You pick your product idea in Session 1 and build it, session by session, into a real demoable AI product by end of the cohort. No exercises, no class projects — just your own product.",
   },
   {
     title: "NO CODE, REAL AI",
@@ -32,7 +32,7 @@ export default function Overview() {
                 Get Ahead
               </span>
               <h3 className="text-2xl font-medium leading-tight text-white sm:text-[23px]">
-                Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window. No prior coding experience required. Every session builds directly on your own capstone idea, so by Session 13 you're not demoing a class exercise — you're demoing your own working AI product
+                Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window. No prior coding experience required. Every session builds directly on your own capstone idea, so by end of the cohort. you're not demoing a class exercise — you're demoing your own working AI product
               </h3>
               <a
                 href="#pricing"
@@ -75,9 +75,7 @@ export default function Overview() {
         {/* testimonial */}
         <blockquote className="mx-auto mt-12 flex max-w-[1040px] flex-col items-center gap-4 rounded-xl border border-white/10 bg-neutral-950/40 p-8 text-center backdrop-blur">
           <p className="max-w-[600px] text-lg text-white sm:text-xl">
-            &quot;I&apos;d never built anything before this. By the final session I had a working
-            chatbot connected to my own documents, and I stress-tested it myself in front of the
-            class.&quot;
+            &quot;I didn't need to learn AI theory — I needed a shippable product. By the capstone, I had a live automation pipeline running my own workflow end-to-end, with a paywall in place.&quot;
           </p>
           <div className="mt-2 flex flex-col items-center">
             <p className="text-white">Course Graduate</p>

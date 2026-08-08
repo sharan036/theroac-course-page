@@ -310,7 +310,7 @@ export default function Problems() {
     <section className="bg-white px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex flex-col items-center gap-4 text-center">
-          <p className="text-sm font-semibold tracking-[0.18em] text-neutral-500">SOUND FAMILIAR?</p>
+          {/* <p className="text-sm font-semibold tracking-[0.18em] text-neutral-500">SOUND FAMILIAR?</p> */}
           <h2 className="max-w-[830px] text-3xl font-extrabold leading-[1.15] tracking-tight text-black sm:text-4xl md:text-[42px]">
             Does Your AI Product Idea Still Live
             <br />

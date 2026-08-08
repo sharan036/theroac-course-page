@@ -5,45 +5,45 @@ import { useState } from "react";
 const modules = [
   {
     title: "Foundations & No-Code Landscape",
-    week: "Week 1 · Sessions 1–3",
+    week: "Week 1",
     chapters: [
-      "Session 1 (Wed) — Kickoff: scoping an AI product idea, tour of the no-code landscape, pick your capstone idea",
-      "Session 2 (Sat) — App builder fundamentals: layout, inputs, buttons, navigation, your first 2-screen app",
-      "Session 3 (Sun) — The data layer: structuring data in Airtable/Google Sheets and connecting it to your app",
+      "Kickoff: scoping an AI product idea, tour of the no-code landscape, pick your capstone idea",
+      "App builder fundamentals: layout, inputs, buttons, navigation, your first 2-screen app",
+      "The data layer: structuring data in Airtable/Google Sheets and connecting it to your app",
     ],
   },
   {
     title: "App Builder Mastery",
-    week: "Week 2 · Sessions 4–6",
+    week: "Week 2",
     chapters: [
-      "Session 4 (Wed) — Logic & workflows: conditional logic, triggers, a working form → save → display flow",
-      "Session 5 (Sat) — User accounts & access: native no-code auth, roles, and gating each user's own data",
-      "Session 6 (Sun) — UI/UX polish: responsive layout, visual hierarchy, making it look like a real product",
+      "Logic & workflows: conditional logic, triggers, a working form → save → display flow",
+      "User accounts & access: native no-code auth, roles, and gating each user's own data",
+      "UI/UX polish: responsive layout, visual hierarchy, making it look like a real product",
     ],
   },
   {
     title: "AI & Model Layer, Conversational AI",
-    week: "Week 3 · Sessions 7–10",
+    week: "Week 3",
     chapters: [
-      "Session 7 (Wed) — Bringing AI into your app, no code: native plugins, Zapier/Make AI steps, an \"AI improve this text\" feature",
-      "Session 8 (Sat) — Prompt engineering for builders: reliable output, few-shot examples, structured/JSON-style prompts",
-      "Session 9 (Sun) — Conversational AI & chatbots: building with Voiceflow/Botpress/Chatbase, connected to your data",
-      "Session 10 (Wed) — No-code RAG: teaching AI your own documents with Chatbase/Stack AI/VectorShift, with source references",
+      "Bringing AI into your app, no code: native plugins, Zapier/Make AI steps, an \"AI improve this text\" feature",
+      "Prompt engineering for builders: reliable output, few-shot examples, structured/JSON-style prompts",
+      "Conversational AI & chatbots: building with Voiceflow/Botpress/Chatbase, connected to your data",
+      "No-code RAG: teaching AI your own documents with Chatbase/Stack AI/VectorShift, with source references",
     ],
   },
   {
     title: "Automation & Launch Prep",
-    week: "Week 4 · Sessions 11–12",
+    week: "Week 4",
     chapters: [
-      "Session 11 (Sat) — Automation basics: triggers, actions, connecting two tools end to end (Zapier/Make/n8n)",
-      "Session 12 (Sun) — Automation applied + payments basics: a real end-to-end automation for your capstone, plus a light no-code Stripe/Razorpay paywall overview",
+      "Automation basics: triggers, actions, connecting two tools end to end (Zapier/Make/n8n)",
+      "Automation applied + payments basics: a real end-to-end automation for your capstone, plus a light no-code Stripe/Razorpay paywall overview",
     ],
   },
   {
     title: "Capstone",
-    week: "Week 5 · Session 13",
+    week: "Week 5",
     chapters: [
-      "Session 13 (final) — Stress-test your own build, estimate AI costs at 100 users, identify where you'd need an engineer, then demo your live AI product",
+      "Stress-test your own build, estimate AI costs at 100 users, identify where you'd need an engineer, then demo your live AI product",
     ],
   },
 ];

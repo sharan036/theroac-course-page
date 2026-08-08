@@ -18,7 +18,6 @@ const typingMessages = [
   "Add an AI feature that improves this text.",
   "Teach my AI assistant to remember our chats."
 ];
-const TIMER_DURATION = 20 * 60 * 1000;
 
 // ----------------------------------------------------
 // Cookie Helpers
@@ -35,7 +34,7 @@ const getCookie = (name: string) => {
   return null;
 };
 
-const setCookie = (name: string, value: string, days = 7) => {
+const setCookie = (name: string, value: string, days = 30) => {
   const date = new Date();
 
   date.setTime(date.getTime() + days * 86400000);
@@ -43,88 +42,57 @@ const setCookie = (name: string, value: string, days = 7) => {
   document.cookie = `${name}=${value}; expires=${date.toUTCString()}; path=/`;
 };
 
-// ----------------------------------------------------
+const INITIAL_SEATS = 19;
+const MIN_SEATS = 1;
+const SEAT_DROP_INTERVAL_MS = 10 * 60 * 1000; // 1 seat every 10 minutes
+const BATCH_DATE = "20 Aug 2025";
 
 export default function Hero() {
-  const [mounted, setMounted] = useState(false);
   const [messageIndex, setMessageIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({
-    minutes: "20",
-    seconds: "00",
-  });
+  const [seatsLeft, setSeatsLeft] = useState(INITIAL_SEATS);
 
+  // Seat auto-reduction, persisted per visitor
   useEffect(() => {
-    setMounted(true);
+    let firstVisit: number;
 
-    let expiresAt: number;
+    const savedFirstVisit = getCookie("firstVisitAt");
 
-    const createTimer = () => {
-      const time = Date.now() + TIMER_DURATION;
-
-      setCookie("offerTimer", String(time));
-
-      return time;
-    };
-
-    const savedTimer = getCookie("offerTimer");
-
-    if (savedTimer) {
-      expiresAt = Number(savedTimer);
-
-      if (Date.now() >= expiresAt) {
-        expiresAt = createTimer();
-      }
+    if (savedFirstVisit) {
+      firstVisit = Number(savedFirstVisit);
     } else {
-      expiresAt = createTimer();
+      firstVisit = Date.now();
+      setCookie("firstVisitAt", String(firstVisit));
     }
 
-    const updateTimer = () => {
-      const remaining = expiresAt - Date.now();
+    const computeSeats = () => {
+      const elapsed = Date.now() - firstVisit;
+      const dropped = Math.floor(elapsed / SEAT_DROP_INTERVAL_MS);
+      const remaining = Math.max(MIN_SEATS, INITIAL_SEATS - dropped);
 
-      if (remaining <= 0) {
-        expiresAt = createTimer();
-        return;
-      }
-
-      const minutes = Math.floor(
-        (remaining / (1000 * 60)) % 60
-      );
-
-      const seconds = Math.floor(
-        (remaining / 1000) % 60
-      );
-
-      setTimeLeft({
-        minutes: String(minutes).padStart(2, "0"),
-        seconds: String(seconds).padStart(2, "0"),
-      });
+      setSeatsLeft(remaining);
     };
 
-    updateTimer();
+    computeSeats();
 
-    const interval = setInterval(updateTimer, 1000);
+    const interval = setInterval(computeSeats, 30 * 1000);
 
     return () => clearInterval(interval);
   }, []);
 
+  // Typing animation
   useEffect(() => {
     const currentMessage = typingMessages[messageIndex];
     let timeout: NodeJS.Timeout;
-    // Typing speed
     const typingSpeed = 55;
-    // Delete speed
     const deletingSpeed = 30;
-    // Pause when completed
     const pauseTime = 1500;
 
     if (!isDeleting) {
       if (displayText.length < currentMessage.length) {
         timeout = setTimeout(() => {
-          setDisplayText(
-            currentMessage.slice(0, displayText.length + 1)
-          );
+          setDisplayText(currentMessage.slice(0, displayText.length + 1));
         }, typingSpeed);
       } else {
         timeout = setTimeout(() => {
@@ -134,16 +102,11 @@ export default function Hero() {
     } else {
       if (displayText.length > 0) {
         timeout = setTimeout(() => {
-          setDisplayText(
-            currentMessage.slice(0, displayText.length - 1)
-          );
+          setDisplayText(currentMessage.slice(0, displayText.length - 1));
         }, deletingSpeed);
       } else {
         setIsDeleting(false);
-
-        setMessageIndex((prev) =>
-          (prev + 1) % typingMessages.length
-        );
+        setMessageIndex((prev) => (prev + 1) % typingMessages.length);
       }
     }
 
@@ -154,7 +117,6 @@ export default function Hero() {
     <header className="relative overflow-hidden bg-black pt-[150px] pb-10 px-4">
 
       {/* BACKGROUND TEXTURE */}
-
       <div className="absolute inset-0 -z-30">
         <Image
           src="https://framerusercontent.com/images/GGNg8KoV9Iwu1Z89UqqLzdQWx0.png"
@@ -166,7 +128,6 @@ export default function Hero() {
       </div>
 
       {/* GRID */}
-
       <div className="absolute inset-0 -z-20 opacity-40">
         <Image
           src="https://framerusercontent.com/images/I5BmrodulLElK3MtIcR7Z5YD8bI.svg"
@@ -177,7 +138,6 @@ export default function Hero() {
       </div>
 
       {/* SPOTLIGHTS */}
-
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -left-52 top-0 h-[700px] w-[450px] rotate-[35deg] bg-white/5 blur-[120px]" />
         <div className="absolute left-1/3 top-0 h-[700px] w-[350px] rotate-[45deg] bg-white/5 blur-[120px]" />
@@ -188,197 +148,109 @@ export default function Hero() {
       <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-16">
 
         {/* HERO CONTENT */}
-
         <div className="flex w-full max-w-[840px] flex-col items-center gap-8">
 
-          {/* TIMER */}
-
+          {/* BATCH INFO BADGE */}
           <Reveal
             duration={600}
             direction="up"
-            className="flex items-center rounded-md bg-white p-[2px]"
+            className="flex items-center gap-4 rounded-lg border border-white/15 bg-black px-5 py-3"
           >
-            <div className="rounded bg-black px-3 py-2">
-              <span className="text-xs font-medium text-white">
-                Limited seats — Cohort closes in
+            <div className="flex items-center gap-2">
+              <span className="text-base text-[#FF6F00]">📅</span>
+              <span className="text-sm text-neutral-200">
+                Batch starts on{" "}
+                <span className="font-semibold text-[#FF6F00]">
+                  {BATCH_DATE}
+                </span>
               </span>
             </div>
 
-            <div className="px-3">
-              <span className="font-mono text-sm text-black">
-                {mounted
-                  ? `${timeLeft.minutes} : ${timeLeft.seconds}`
-                  : "20 : 00"}
-              </span>
-            </div>
+            <div className="h-4 w-px bg-white/20" />
+
+            <span className="text-sm text-neutral-200">
+              Only{" "}
+              <span className="font-semibold text-[#FF6F00]">
+                {seatsLeft}
+              </span>{" "}
+              seats left
+            </span>
           </Reveal>
 
           {/* HEADING */}
-
           <Reveal delay={100} duration={800}>
-
-            <h1
-              className="
-              text-center
-              text-[54px]
-              font-semibold
-              leading-[0.95]
-              tracking-[-0.04em]
-              text-white
-              md:text-[64px]
-            "
-            >
+            <h1 className="text-center text-[54px] font-semibold leading-[0.95] tracking-[-0.04em] text-white md:text-[64px]">
               Build & Ship a Real AI Product in{" "}
               <span className="text-[#ff6f00]">30 Days — No Code Required.</span>
             </h1>
           </Reveal>
+
           <Reveal delay={140} duration={800}>
             <p className="max-w-[640px] text-center text-base text-neutral-200 sm:text-lg">
-              Live sessions, Wed / Sat / Sun, 2 hours each. From picking your idea to a working,
-              demoable AI product — using no-code app builders, no-code AI integration, and no-code
-              automation. Built for working professionals with limited weekly time.
+              Live sessions, Wed / Sat / Sun, 2 hours each. From picking your idea to a
+              working, demoable AI product — using no-code app builders, no-code AI
+              integration, and no-code automation. Built for working professionals with
+              limited weekly time.
             </p>
           </Reveal>
-          {/* PROMPT BOX */}
-          <Reveal
-            delay={180}
-            duration={800}
-            className="w-full"
-          >
-            <div
-              className="
-              rounded-[15px]
-              border
-              border-white/30
-              bg-black/20
-              px-7
-              py-6
-              backdrop-blur-sm
-            "
-            >
-              <p
-                className="
-                mb-12
-                min-h-[70px]
-                text-[28px]
-                font-medium
-                text-white
-                md:text-[32px]
-              "
-              >
-                {displayText}
 
-                <span className="animate-pulse text-white">
-                  |
-                </span>
+          {/* PROMPT BOX */}
+          <Reveal delay={180} duration={800} className="w-full">
+            <div className="rounded-[15px] border border-white/30 bg-black/20 px-7 py-6 backdrop-blur-sm">
+              <p className="mb-12 min-h-[70px] text-[28px] font-medium text-white md:text-[32px]">
+                {displayText}
+                <span className="animate-pulse text-white">|</span>
               </p>
 
               <div className="flex items-center justify-between">
-
                 <div className="flex items-center gap-6">
-
-                  <button className="text-3xl text-white">
-                    +
-                  </button>
-
+                  <button className="text-3xl text-white">+</button>
                   <button className="flex items-center gap-2 text-white">
                     <span>⚙</span>
                     <span>Tools</span>
                   </button>
-
                 </div>
 
                 <div className="flex items-center gap-4">
-
-                  <span className="text-white">
-                    🎤
-                  </span>
-
+                  <span className="text-white">🎤</span>
                   <div className="grid h-11 w-11 place-items-center rounded-full bg-white/20">
-
                     <div className="flex gap-[2px]">
                       <div className="h-2 w-1 rounded bg-white" />
                       <div className="h-4 w-1 rounded bg-white" />
                       <div className="h-3 w-1 rounded bg-white" />
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
             </div>
           </Reveal>
 
           {/* CTA + SOCIAL PROOF */}
-
-          <Reveal
-            delay={280}
-            duration={800}
-            className="flex flex-col items-center gap-6 lg:flex-row"
-          >
+          <Reveal delay={280} duration={800} className="flex flex-col items-center gap-6 lg:flex-row">
             <a
               href="#pricing"
-              className="
-              flex items-center gap-4 rounded-lg
-              bg-[#FF6F00]
-              py-2 pr-2 pl-6
-              text-lg font-medium text-white
-              shadow-[inset_0_4px_10px_rgba(255,255,255,0.15)]
-              transition-all duration-200
-              hover:scale-[1.02]
-            "
+              className="flex items-center gap-4 rounded-lg bg-[#FF6F00] py-2 pr-2 pl-6 text-lg font-medium text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.15)] transition-all duration-200 hover:scale-[1.02]"
             >
               Book My Seat
-
               <span className="grid h-12 w-12 place-items-center rounded-md bg-white text-[#FF6F00]">
                 →
               </span>
             </a>
 
             <div className="flex items-center gap-5">
-
               <div className="flex">
-
                 {headshots.map((src, i) => (
                   <div
                     key={src}
-                    className="
-                    relative
-                    -ml-3
-                    h-12
-                    w-12
-                    overflow-hidden
-                    rounded-full
-                    border-2
-                    border-white
-                    first:ml-0
-                  "
-                    style={{
-                      zIndex: headshots.length - i,
-                    }}
+                    className="relative -ml-3 h-12 w-12 overflow-hidden rounded-full border-2 border-white first:ml-0"
+                    style={{ zIndex: headshots.length - i }}
                   >
-                    <Image
-                      src={src}
-                      alt=""
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={src} alt="" fill className="object-cover" />
                   </div>
                 ))}
-
               </div>
 
-              <p
-                className="
-                max-w-[220px]
-                text-xs
-                uppercase
-                leading-tight
-                text-neutral-200
-                font-['Gloria_Hallelujah']
-              "
-              >
+              <p className="max-w-[220px] text-xs uppercase leading-tight text-neutral-200 font-['Gloria_Hallelujah']">
                 Every cohort ships real, working AI products — zero code written.
               </p>
             </div>
@@ -386,21 +258,10 @@ export default function Hero() {
         </div>
 
         {/* VIDEO PLAYER */}
-
         <Reveal
           direction="none"
           duration={900}
-          className="
-          relative
-          aspect-video
-          w-full
-          max-w-[1200px]
-          overflow-hidden
-          rounded-2xl
-          border
-          border-white/30
-          bg-black
-        "
+          className="relative aspect-video w-full max-w-[1200px] overflow-hidden rounded-2xl border border-white/30 bg-black"
         >
           <Image
             src="https://storage.googleapis.com/heartfelt-6a946.firebasestorage.app/theROAC/Building%20AI%20Products.png"
@@ -409,7 +270,6 @@ export default function Hero() {
             className="object-cover"
           />
         </Reveal>
-
       </div>
     </header>
   );

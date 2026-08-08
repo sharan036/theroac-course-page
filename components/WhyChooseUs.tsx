@@ -1,10 +1,10 @@
 const stats = [
-  { title: "100% — Live Sessions, Not Recordings", desc: "Every session is live — Wed/Sat/Sun, 2 hours each — with real-time building and feedback." },
+  { title: "100% — Live Sessions", desc: "Every session is live — Wed/Sat/Sun, 2 hours each — with real-time building and feedback." },
   { title: "5 Weeks — One Continuous Capstone Build", desc: "Foundations → App Builder Mastery → AI Layer → Automation & Launch, all inside your own product." },
   { title: "1 Capstone — A Real, Demoable AI Product", desc: "Not a class exercise — the product you scope in Session 1 is the one you demo in Session 13." },
   { title: "4 AI Tools — No-Code AI Fluency", desc: "ChatGPT, Claude, no-code RAG tools, and conversational AI builders — connected without writing code." },
   { title: "2 Automations — Real Workflow Automation", desc: "A two-tool connection and a full end-to-end automation, both built and tested live." },
-  { title: "1 Stress-Test — Know Your Limits, First-Hand", desc: "A dedicated exercise where you break your own build and learn exactly where no-code stops working for you." },
+  { title: "1 Stress-Test — Know Your Limits, First-Hand", desc: "A dedicated exercise where you break your own build and learn exactly where no-code stops working for you. Plus, lifetime access to the program." },
 ];
 
 export default function WhyChooseUs() {

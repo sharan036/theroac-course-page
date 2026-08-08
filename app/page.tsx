@@ -22,10 +22,10 @@ export default function Home() {
       <Problems />
       <Overview />
       <Curriculum />
-      <WhyChooseUs />
-      <Testimonials />
-      <Pricing />
       <IsThisForYou />
+      <WhyChooseUs />
+      {/* <Testimonials /> */}
+      <Pricing />
       <Mentor />
       <Community />
       <Brands />

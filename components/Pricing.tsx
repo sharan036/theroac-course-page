@@ -8,7 +8,7 @@ const features = [
 const highlights = [
   "Zero Coding Experience Required",
   "Live 2-Hour Sessions (Wed/Sat/Sun)",
-  "One Real AI Product Shipped by Session 13",
+  "One Real AI Product Shipped by end of Cohort",
   "Built for Working Professionals — Light Weekly Homework",
 ];
 

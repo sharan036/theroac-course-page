@@ -44,7 +44,7 @@ const setCookie = (name: string, value: string, days = 30) => {
 
 const INITIAL_SEATS = 19;
 const MIN_SEATS = 1;
-const BATCH_DATE = "20 Aug 2025";
+const BATCH_DATE = "20 Aug 2026";
 const EARLY_DROP_MIN_DELAY_MS = 15 * 1000;  // 15s
 const EARLY_DROP_MAX_DELAY_MS = 45 * 1000;  // 45s
 const EARLY_DROP_PROBABILITY = 0.6; // 60% of visitors see one drop

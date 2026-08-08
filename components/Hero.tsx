@@ -44,8 +44,11 @@ const setCookie = (name: string, value: string, days = 30) => {
 
 const INITIAL_SEATS = 19;
 const MIN_SEATS = 1;
-const SEAT_DROP_INTERVAL_MS = 10 * 60 * 1000; // 1 seat every 10 minutes
 const BATCH_DATE = "20 Aug 2025";
+const EARLY_DROP_MIN_DELAY_MS = 15 * 1000;  // 15s
+const EARLY_DROP_MAX_DELAY_MS = 45 * 1000;  // 45s
+const EARLY_DROP_PROBABILITY = 0.6; // 60% of visitors see one drop
+const BASELINE_INTERVAL_MS = 8 * 60 * 1000;
 
 export default function Hero() {
   const [messageIndex, setMessageIndex] = useState(0);
@@ -53,11 +56,14 @@ export default function Hero() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [seatsLeft, setSeatsLeft] = useState(INITIAL_SEATS);
 
-  // Seat auto-reduction, persisted per visitor
   useEffect(() => {
     let firstVisit: number;
+    let baseSeats: number;
+    let earlyDropAt: number | null;
 
     const savedFirstVisit = getCookie("firstVisitAt");
+    const savedBaseSeats = getCookie("baseSeats");
+    const savedEarlyDropAt = getCookie("earlyDropAt");
 
     if (savedFirstVisit) {
       firstVisit = Number(savedFirstVisit);
@@ -66,18 +72,46 @@ export default function Hero() {
       setCookie("firstVisitAt", String(firstVisit));
     }
 
+    if (savedBaseSeats) {
+      baseSeats = Number(savedBaseSeats);
+    } else {
+      baseSeats = INITIAL_SEATS;
+      setCookie("baseSeats", String(baseSeats));
+    }
+
+    if (savedEarlyDropAt) {
+      earlyDropAt = savedEarlyDropAt === "none" ? null : Number(savedEarlyDropAt);
+    } else {
+      const willDrop = Math.random() < EARLY_DROP_PROBABILITY;
+      if (willDrop) {
+        earlyDropAt =
+          firstVisit +
+          EARLY_DROP_MIN_DELAY_MS +
+          Math.random() * (EARLY_DROP_MAX_DELAY_MS - EARLY_DROP_MIN_DELAY_MS);
+        setCookie("earlyDropAt", String(Math.round(earlyDropAt)));
+      } else {
+        earlyDropAt = null;
+        setCookie("earlyDropAt", "none");
+      }
+    }
+
     const computeSeats = () => {
-      const elapsed = Date.now() - firstVisit;
-      const dropped = Math.floor(elapsed / SEAT_DROP_INTERVAL_MS);
-      const remaining = Math.max(MIN_SEATS, INITIAL_SEATS - dropped);
+      const now = Date.now();
+      let seats = baseSeats;
+      if (earlyDropAt && now >= earlyDropAt) {
+        seats -= 1;
+      }
 
-      setSeatsLeft(remaining);
+      const baselineStart = earlyDropAt ?? firstVisit;
+      if (now > baselineStart) {
+        const elapsed = now - baselineStart;
+        const dropped = Math.floor(elapsed / BASELINE_INTERVAL_MS);
+        seats -= dropped;
+      }
+      setSeatsLeft(Math.max(MIN_SEATS, seats));
     };
-
     computeSeats();
-
-    const interval = setInterval(computeSeats, 30 * 1000);
-
+    const interval = setInterval(computeSeats, 5 * 1000);
     return () => clearInterval(interval);
   }, []);
 

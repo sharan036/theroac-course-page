@@ -52,10 +52,10 @@ export default function Community() {
       </div>
 
       {/* decorative dotted path + whatsapp bubble */}
-      <div className="relative mx-auto mt-16 hidden max-w-[900px] items-center justify-center sm:flex">
+      <div className="relative mx-auto mt-16 items-center justify-center flex">
         <svg
           viewBox="0 0 900 120"
-          className="absolute w-full text-[#ffd9b3]"
+          className="absolute w-full text-[#ffd9b3] hidden max-w-[900px] lg:block"
           fill="none"
         >
           <path
@@ -67,7 +67,7 @@ export default function Community() {
           <circle cx="220" cy="30" r="5" fill="#ff6f00" />
           <circle cx="680" cy="30" r="5" fill="#ff6f00" />
         </svg>
-        <div className="relative z-10 grid h-24 w-24 place-items-center rounded-full border border-neutral-100 bg-white shadow-lg">
+        <div className="relative z-10 grid h-24 w-24 place-items-center rounded-full border border-neutral-100 bg-white shadow-lg lg:mt-12">
           <span className="text-lg"><Image src="./whatsapp.svg" alt="WhatsApp" width={48} height={48} /></span>
         </div>
       </div>

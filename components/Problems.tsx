@@ -251,6 +251,9 @@ export default function Problems() {
     <section className="bg-white px-4 py-14 sm:py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex flex-col items-center gap-4 text-center">
+          <p className="text-xs font-semibold tracking-[0.18em] text-neutral-400 sm:text-sm">
+            SOUND FAMILIAR?
+          </p>
           <h2 className="max-w-[830px] text-2xl font-extrabold leading-[1.2] tracking-tight text-black sm:text-3xl md:text-4xl lg:text-[42px] lg:leading-[1.15]">
             Does Your AI Product Idea Still Live
             <br className="hidden sm:block" />

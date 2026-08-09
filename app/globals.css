@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --font-finger-paint: "Finger Paint", cursive;
+  --font-dm-sans: "DM Sans", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
 :root {
   --color-cream: #f2f1ee;
   --color-orange: #ff6f00;

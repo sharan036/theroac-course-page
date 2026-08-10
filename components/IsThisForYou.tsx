@@ -15,7 +15,6 @@ import {
   RefreshCw,
   CheckCircle2,
   Target,
-  MessageCircle,
   LayoutDashboard,
   FileSpreadsheet,
 } from "lucide-react";
@@ -27,6 +26,21 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
+// Shared arrow — sized with responsive classes instead of fixed px so it
+// shrinks in lockstep with the nodes on narrow slides (slidesPerView 1.1).
+function Arrow({ rotate }: { rotate?: number }) {
+  return (
+    <Image
+      src="arrow.svg"
+      alt=""
+      width={24}
+      height={24}
+      className="h-4 w-4 shrink-0 sm:h-5 sm:w-5 lg:h-6 lg:w-6"
+      style={rotate ? { transform: `rotate(${rotate}deg)` } : undefined}
+    />
+  );
+}
 
 export default function BuildProjects() {
   return (
@@ -81,7 +95,7 @@ export default function BuildProjects() {
           className="!pb-14"
         >
           {/* CARD 1 */}
-          <SwiperSlide className="h-auto">
+          <SwiperSlide>
             <Card
               number="01"
               title="AI SaaS Product"
@@ -89,108 +103,82 @@ export default function BuildProjects() {
               footer="End-to-end product you can ship"
             >
               <div className="flex items-center justify-between">
-                <Node icon={<User size={20} />} title="User" />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  orange
-                  icon={<Brain size={20} />}
-                  title="AI Engine"
-                />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  icon={<ChartColumn size={20} />}
-                  title="Result"
-                />
+                <Node icon={<User size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="User" />
+                <Arrow />
+                <Node orange icon={<Brain size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="AI Engine" />
+                <Arrow />
+                <Node icon={<ChartColumn size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Result" />
               </div>
               <div className="flex justify-center">
                 <div className="flex flex-col items-center">
-                  <Image src="arrow.svg" alt="Arrow" width={24} height={24} style={{ transform: 'rotate(270deg)' }} />
-                  <Node
-                    icon={<Database size={20} />}
-                    title="Database"
-                  />
+                  <Arrow rotate={270} />
+                  <Node icon={<Database size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Database" />
                 </div>
               </div>
             </Card>
           </SwiperSlide>
           {/* CARD 2 */}
-          <SwiperSlide className="h-auto">
+          <SwiperSlide>
             <Card
               number="02"
               title="RAG-Powered Assistant"
               description="Create an AI assistant that answers questions using your data."
               footer="Smart, context-aware responses"
             >
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-between">
                 <MiniStack
                   data={[
-                    {
-                      icon: <FileText size={18} />,
-                      text: "PDF",
-                    },
-                    {
-                      icon: <FileText size={18} />,
-                      text: "Docs",
-                    },
-                    {
-                      icon: <Globe size={18} />,
-                      text: "Web",
-                    },
+                    { icon: <FileText size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, text: "PDF" },
+                    { icon: <FileText size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, text: "Docs" },
+                    { icon: <Globe size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, text: "Web" },
                   ]}
                 />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  title="Embedding Model"
-                />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  icon={<ChartColumn size={20} />}
-                  title="Vector Database"
-                />
+                <Arrow />
+                <Node title="Embedding Model" />
+                <Arrow />
+                <Node icon={<ChartColumn size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Vector Database" />
               </div>
-              <div className="flex items-center justify-end">
+              <div className="flex items-center justify-end gap-1.5 sm:gap-2">
                 <div className="flex flex-col items-center">
-                  <Image src="arrow.svg" alt="Arrow" width={24} height={24} style={{ transform: 'rotate(90deg)' }} />
-                  <Node
-                    icon={<Sparkles size={20} />}
-                    title="LLM"
-                  />
+                  <Arrow rotate={90} />
+                  <Node icon={<Sparkles size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="LLM" />
                 </div>
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  icon={<MessageCircleMore size={20} />}
-                  title="Answer"
-                />
+                <Arrow />
+                <Node icon={<MessageCircleMore size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Answer" />
               </div>
             </Card>
           </SwiperSlide>
           {/* CARD 3 */}
-          <SwiperSlide className="h-auto">
+          <SwiperSlide>
             <Card
-            number="03"
-            title="AI Agent Workflow"
-            description="Build autonomous agents that take action, use tools, and get work done."
-            footer="Agents that think, act & deliver"
-          >
-            <div className="flex items-center justify-center">
-              <Node icon={<Target size={22} />} title="Trigger" />
-              <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-              <div className="flex flex-col items-center gap-1.5 rounded-full border-2 border-[#ff6f00] px-4 py-3 text-[#ff6f00]">
-                <Bot size={24} />
-                <span className="whitespace-nowrap text-[11px] font-semibold">Automation</span>
+              number="03"
+              title="AI Agent Workflow"
+              description="Build autonomous agents that take action, use tools, and get work done."
+              footer="Agents that think, act & deliver"
+            >
+              <div className="flex items-center justify-center">
+                <Node icon={<Target size={20} className="h-4.5 w-4.5 sm:h-5 sm:w-5" />} title="Trigger" />
+                <Arrow />
+                <div className="flex shrink-0 flex-col items-center gap-1 rounded-full border-2 border-[#ff6f00] px-2.5 py-2 text-[#ff6f00] sm:gap-1.5 sm:px-4 sm:py-3">
+                  <Bot className="h-4 w-4 sm:h-6 sm:w-6" />
+                  <span className="whitespace-nowrap text-[9px] font-semibold sm:text-[11px]">
+                    Automation
+                  </span>
+                </div>
               </div>
-              <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-              <div className="ml-1 flex flex-col gap-1.5">
-                <Mini icon={<LayoutDashboard size={18} />} text="App" />
-                <Mini icon={<FileSpreadsheet size={18} />} text="Sheet" />
-                <Mini icon={<Mail size={18} />} text="Email" />
-                <Mini icon={<MessageCircleMore size={18} />} text="Chatbot" />
+              <div className="flex justify-center">
+                <Arrow rotate={90} />
               </div>
-            </div>
-          </Card>
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                <Mini icon={<LayoutDashboard size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="App" />
+                <Mini icon={<FileSpreadsheet size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Sheet" />
+                <Mini icon={<Mail size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Email" />
+                <Mini icon={<MessageCircleMore size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Chatbot" />
+              </div>
+            </Card>
           </SwiperSlide>
           {/* CARD 4 */}
-          <SwiperSlide className="h-auto">
+          <SwiperSlide>
             <Card
               number="04"
               title="AI-Powered Feature"
@@ -198,30 +186,17 @@ export default function BuildProjects() {
               footer="Ship features with real AI value"
             >
               <div className="flex items-center justify-between">
-                <Node
-                  icon={<Pencil size={22} />}
-                  title="User Input"
-                />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  orange
-                  icon={<Sparkles size={22} />}
-                  title="AI Plugin"
-                />
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} />
-                <Node
-                  icon={<Sparkles size={22} />}
-                  title="Smart Output"
-                />
+                <Node icon={<Pencil size={20} className="h-4.5 w-4.5 sm:h-5 sm:w-5" />} title="User Input" />
+                <Arrow />
+                <Node orange icon={<Sparkles size={20} className="h-4.5 w-4.5 sm:h-5 sm:w-5" />} title="AI Plugin" />
+                <Arrow />
+                <Node icon={<Sparkles size={20} className="h-4.5 w-4.5 sm:h-5 sm:w-5" />} title="Smart Output" />
               </div>
               <div className="flex items-center justify-center">
-                <Image src="arrow.svg" alt="Arrow" width={24} height={24} style={{ transform: 'rotate(90deg)' }} />
+                <Arrow rotate={90} />
               </div>
-              <div className="pb-14 flex items-center justify-center">
-                <Mini
-                  icon={<RefreshCw size={20} />}
-                  text="Feedback Loop"
-                />
+              <div className="flex items-center justify-center pb-6 sm:pb-14">
+                <Mini icon={<RefreshCw size={18} className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />} text="Feedback Loop" />
               </div>
             </Card>
           </SwiperSlide>
@@ -239,33 +214,22 @@ type CardProps = {
   children: React.ReactNode;
 };
 
-function Card({
-  number,
-  title,
-  description,
-  footer,
-  children,
-}: CardProps) {
+function Card({ number, title, description, footer, children }: CardProps) {
   return (
-    <div className="flex h-full flex-col rounded-[26px] border border-zinc-200 bg-white p-6 lg:p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-      <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl border border-[#f39a55] text-lg font-bold text-[#f08a34]">
+    <div className="flex h-full flex-col rounded-[20px] border border-zinc-200 bg-white p-4 sm:p-4 lg:rounded-[26px] lg:px-4 lg:py-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+      <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#f39a55] text-base font-bold text-[#f08a34] sm:h-12 sm:w-12 sm:text-lg">
         {number}
       </div>
-      <h3 className="mt-6 text-2xl lg:text-[24px] font-bold leading-tight text-zinc-900">
+      <h3 className="mt-4 text-xl font-bold leading-tight text-zinc-900 sm:mt-6 sm:text-2xl lg:text-[24px]">
         {title}
       </h3>
-      <p className="mt-4 text-base lg:text-[16px] leading-[1.05] text-zinc-600">
+      <p className="mt-3 text-sm leading-snug text-zinc-600 sm:mt-4 sm:text-base lg:text-[16px] lg:leading-[1.05]">
         {description}
       </p>
-      <div className="my-10 flex-1">
-        {children}
-      </div>
-      <div className="border-t pt-6">
-        <div className="flex items-center gap-3 text-base font-medium text-zinc-700">
-          <CheckCircle2
-            className="text-[#f08a34]"
-            size={20}
-          />
+      <div className="my-6 flex-1 space-y-4 sm:my-10 sm:space-y-6">{children}</div>
+      <div className="border-t pt-4 sm:pt-6">
+        <div className="flex items-center gap-2 text-sm font-medium text-zinc-700 sm:text-base">
+          <CheckCircle2 className="shrink-0 text-[#f08a34]" size={20} />
           {footer}
         </div>
       </div>
@@ -279,25 +243,17 @@ type NodeProps = {
   orange?: boolean;
 };
 
-function Node({
-  icon,
-  title,
-  orange = false,
-}: NodeProps) {
+function Node({ icon, title, orange = false }: NodeProps) {
   return (
     <div
-      className={`flex h-20 w-20 flex-col items-center justify-center rounded-2xl border text-center shadow-sm transition-all ${
-        orange
-          ? "border-[#f08a34] bg-orange-50"
-          : "border-zinc-300 bg-white"
+      className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border text-center shadow-sm transition-all sm:h-20 sm:w-20 sm:gap-0 sm:rounded-2xl ${
+        orange ? "border-[#f08a34] bg-orange-50" : "border-zinc-300 bg-white"
       }`}
     >
       {icon}
-
-      <div className="mt-2 px-2 text-xs font-semibold text-zinc-700">
+      <div className="px-1 text-center text-[9px] font-semibold leading-tight text-zinc-700 sm:mt-2 sm:px-2 sm:text-xs">
         {title}
       </div>
-
     </div>
   );
 }
@@ -307,14 +263,11 @@ type MiniProps = {
   text: string;
 };
 
-function Mini({
-  icon,
-  text,
-}: MiniProps) {
+function Mini({ icon, text }: MiniProps) {
   return (
-    <div className="flex h-12 w-full items-center gap-3 rounded-xl border border-zinc-300 bg-white px-4 text-sm font-medium shadow-sm">
+    <div className="flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-2.5 text-xs font-medium shadow-sm sm:h-12 sm:gap-3 sm:rounded-xl sm:px-4 sm:text-[12px]">
       {icon}
-      {text}
+      <span className="truncate">{text}</span>
     </div>
   );
 }
@@ -326,15 +279,13 @@ type MiniPropsObject = {
   }>;
 };
 
-function MiniStack({
-  data
-}: MiniPropsObject) {
+function MiniStack({ data }: MiniPropsObject) {
   return (
-    <div className="w-24 flex-col items-center rounded-xl border border-zinc-300 bg-white p-4 text-sm font-medium shadow-sm">
+    <div className="flex w-16 shrink-0 flex-col items-start gap-1.5 rounded-lg border border-zinc-300 bg-white p-2.5 text-sm font-medium shadow-sm sm:w-24 sm:gap-2 sm:rounded-xl sm:p-4">
       {data.map((item, index) => (
-        <div key={index} className="flex items-center gap-2 mb-2 last:mb-0">
+        <div key={index} className="flex items-center gap-1.5">
           {item.icon}
-          <span className="text-sm text-zinc-600">{item.text}</span>
+          <span className="text-[8px] text-zinc-600 sm:text-[12px]">{item.text}</span>
         </div>
       ))}
     </div>

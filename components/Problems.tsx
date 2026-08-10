@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 type Waypoint = {
   id: string;
@@ -11,6 +14,14 @@ type Waypoint = {
 
 const ORANGE = "#F2600C";
 const ORANGE_BRIGHT = "#FF7A1A";
+
+// Design is authored at this fixed size, then scaled as a single rigid
+// unit to fit the container. This keeps the arrows (SVG), the center
+// graphic, and the cards perfectly aligned at every viewport width —
+// instead of letting positions scale via % while text/padding/icons
+// stay locked to px, which is what broke on non-lg desktop widths.
+const DESIGN_WIDTH = 1536;
+const DESIGN_HEIGHT = 720;
 
 function IconIdea({ className = "" }: { className?: string }) {
   return (
@@ -137,14 +148,14 @@ function WaypointCard({ point }: { point: Waypoint }) {
   const { Icon, id, copy } = point;
   return (
     <div
-      className="absolute flex items-start gap-3 rounded-2xl bg-white pl-9 pr-3 py-5 shadow-[0_10px_28px_-10px_rgba(15,15,15,0.18)] ring-1 ring-black/[0.04] lg:gap-4 lg:pl-10 lg:pr-4 lg:py-6"
+      className="absolute flex items-start gap-4 rounded-2xl bg-white pl-10 pr-4 py-6 shadow-[0_10px_28px_-10px_rgba(15,15,15,0.18)] ring-1 ring-black/[0.04]"
       style={{ left: `${point.left}%`, top: `${point.top}%`, width: `${point.width}%` }}
     >
-      <span className="absolute top-3 left-3 grid h-6 w-6 place-items-center rounded-[7px] border-[1.5px] border-[#F2600C] bg-white text-[11px] font-bold text-[#F2600C] lg:h-7 lg:w-7 lg:text-[13px]">
+      <span className="absolute top-3 left-3 grid h-7 w-7 place-items-center rounded-[7px] border-[1.5px] border-[#F2600C] bg-white text-[13px] font-bold text-[#F2600C]">
         {id}
       </span>
-      <Icon className="mt-1 h-9 w-9 shrink-0 lg:h-12 lg:w-12" />
-      <p className="text-left text-[12px] leading-relaxed text-neutral-700 lg:text-[13.5px]">
+      <Icon className="mt-1 h-12 w-12 shrink-0" />
+      <p className="text-left text-[13.5px] leading-relaxed text-neutral-700">
         {copy}
       </p>
     </div>
@@ -246,7 +257,45 @@ function MobileLoop() {
   );
 }
 
+/**
+ * Scales the fixed 1536x720 desktop composition down (or up) to fit
+ * whatever width the container actually has, using a CSS transform.
+ * This is what makes the waypoint cards, arrows, and center graphic
+ * stay perfectly locked together at every screen size — rather than
+ * the previous approach where card positions were % (responsive) but
+ * card padding/text/icon sizes were fixed px (not responsive), which
+ * caused misalignment and overlap outside the two hardcoded breakpoints.
+ */
+function useScaleToFit(designWidth: number) {
+  const outerRef = useRef<HTMLDivElement | null>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const el = outerRef.current;
+    if (!el) return;
+
+    const update = () => {
+      const width = el.getBoundingClientRect().width;
+      if (width > 0) setScale(width / designWidth);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener("resize", update);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [designWidth]);
+
+  return { outerRef, scale };
+}
+
 export default function Problems() {
+  const { outerRef, scale } = useScaleToFit(DESIGN_WIDTH);
+
   return (
     <section className="bg-white px-4 py-14 sm:py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
@@ -264,21 +313,38 @@ export default function Problems() {
           </p>
         </div>
 
+        {/* Outer: real responsive width, height driven by the scaled inner box */}
         <div
+          ref={outerRef}
           className="relative mx-auto hidden w-full lg:block"
-          style={{ aspectRatio: "1536 / 720", maxWidth: 1536 }}
+          style={{
+            maxWidth: DESIGN_WIDTH,
+            height: DESIGN_HEIGHT * scale,
+          }}
         >
-          <Image
-            src="/arrow-lines.png"
-            alt=""
-            fill
-            priority
-            className="pointer-events-none object-fill"
-          />
-          <CenterGraphic />
-          {WAYPOINTS.map((point) => (
-            <WaypointCard key={point.id} point={point} />
-          ))}
+          {/* Inner: fixed 1536x720 design, uniformly scaled to fit outer width */}
+          <div
+            className="absolute left-0 top-0"
+            style={{
+              width: DESIGN_WIDTH,
+              height: DESIGN_HEIGHT,
+              transform: `scale(${scale})`,
+              transformOrigin: "top left",
+            }}
+          >
+            <Image
+              src="/arrow-lines.png"
+              alt=""
+              width={DESIGN_WIDTH}
+              height={DESIGN_HEIGHT}
+              priority
+              className="pointer-events-none absolute inset-0 h-full w-full object-fill"
+            />
+            <CenterGraphic />
+            {WAYPOINTS.map((point) => (
+              <WaypointCard key={point.id} point={point} />
+            ))}
+          </div>
         </div>
         <MobileLoop />
       </div>

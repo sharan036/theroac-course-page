@@ -110,10 +110,10 @@ export default function BuildProjects() {
                 <Node icon={<ChartColumn size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Result" />
               </div>
               <div className="flex justify-center">
-                <div className="flex flex-col items-center">
-                  <Arrow rotate={270} />
-                  <Node icon={<Database size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Database" />
-                </div>
+                <Arrow rotate={270} />
+              </div>
+              <div className="flex justify-center">
+                <Node icon={<Database size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Database" />
               </div>
             </Card>
           </SwiperSlide>
@@ -138,9 +138,11 @@ export default function BuildProjects() {
                 <Arrow />
                 <Node icon={<ChartColumn size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="Vector Database" />
               </div>
+              <div className="flex justify-center">
+                <Arrow rotate={270} />
+              </div>
               <div className="flex items-center justify-end gap-1.5 sm:gap-2">
                 <div className="flex flex-col items-center">
-                  <Arrow rotate={90} />
                   <Node icon={<Sparkles size={18} className="h-4 w-4 sm:h-5 sm:w-5" />} title="LLM" />
                 </div>
                 <Arrow />
@@ -169,7 +171,7 @@ export default function BuildProjects() {
               <div className="flex justify-center">
                 <Arrow rotate={90} />
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3.5 border border-dashed p-2.5 sm:p-4 rounded-lg">
                 <Mini icon={<LayoutDashboard size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="App" />
                 <Mini icon={<FileSpreadsheet size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Sheet" />
                 <Mini icon={<Mail size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Email" />
@@ -226,13 +228,15 @@ function Card({ number, title, description, footer, children }: CardProps) {
       <p className="mt-3 text-sm leading-snug text-zinc-600 sm:mt-4 sm:text-base lg:text-[16px] lg:leading-[1.05]">
         {description}
       </p>
-      <div className="my-6 flex-1 space-y-4 sm:my-10 sm:space-y-6">{children}</div>
-      <div className="border-t pt-4 sm:pt-6">
-        <div className="flex items-center gap-2 text-sm font-medium text-zinc-700 sm:text-base">
-          <CheckCircle2 className="shrink-0 text-[#f08a34]" size={20} />
-          {footer}
-        </div>
-      </div>
+      { number === "01" ? (
+        <div className="my-8 flex-1 sm:my-13">{children}</div>
+      ): (number === "03") ? (
+        <div className="my-5 flex-1">{children}</div>
+      ): (
+        <div className="my-5 flex-1 sm:my-10">{children}</div>
+      )}
+
+      
     </div>
   );
 }

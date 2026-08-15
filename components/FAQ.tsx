@@ -4,28 +4,40 @@ import { useState } from "react";
 
 const faqs = [
   {
-    q: "Do I need any coding experience?",
-    a: "No. This course is built entirely around no-code tools — app builders, Airtable/Google Sheets, no-code AI plugins, and automation platforms like Zapier and Make. If you can use a spreadsheet, you can follow along.",
+    q: "What's the time commitment?",
+    a: "Live sessions on Wed/Sat/Sun, 2 hours each, over 30 days — a few hours a week.",
   },
   {
-    q: "What's the actual time commitment?",
-    a: "Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window, plus light homework between sessions — a few hours a week, not a daily grind. It's designed for working professionals with limited weekly time.",
+    q: "Are sessions live or recorded?",
+    a: "Live, with real-time feedback. Recordings are available if you miss one.",
   },
   {
-    q: "Are the sessions live or pre-recorded?",
-    a: "Live. Every session is a real-time build with the mentor and the cohort — you'll get feedback in the moment, not just a video to watch alone.",
-  },
-  {
-    q: "What do I actually walk away with?",
-    a: "One real, working, demoable AI product that you scope in Session 1 and build session by session — plus a first-hand, tested understanding of exactly where no-code stops working for your specific idea.",
+    q: "What do I walk away with?",
+    a: "A real, working AI product you build yourself, plus a clear sense of where no-code stops working for your idea.",
   },
   {
     q: "Which tools will I use?",
-    a: "A no-code app builder (Bubble/Glide/Adalo), Airtable or Google Sheets for data, ChatGPT and Claude via no-code plugins, a conversational AI tool (Voiceflow/Botpress/Chatbase), a no-code RAG tool (Chatbase/Stack AI/VectorShift), and an automation platform (Zapier/Make/n8n).",
+    a: "Bubble, Airtable, ChatGPT, Claude, Chatbase, n8n, and Razorpay.",
   },
   {
-    q: "What if I miss a live session?",
-    a: "Recordings are available so you don't fall behind, but because each session builds on your own capstone, we recommend attending live whenever possible to get real-time feedback.",
+    q: "What's the stress-test session?",
+    a: "You break your own build on purpose, estimate real usage costs, and find its limits — hands-on, not a lecture.",
+  },
+  {
+    q: "Do I get access after the course ends?",
+    a: "Yes — lifetime access to every session recording.",
+  },
+  {
+    q: "Can I pause if I get busy?",
+    a: "The cohort runs on a live schedule, but recordings let you catch up anytime.",
+  },
+  {
+    q: "Is this the same as the coding bootcamp?",
+    a: "No — same outcomes, but built entirely without code.",
+  },
+  {
+    q: "Do I need to pay for the tools separately?",
+    a: "Most have free tiers that cover the course. Paid tiers only matter if you keep your product live after.",
   },
 ];
 

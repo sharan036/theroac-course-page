@@ -96,7 +96,7 @@ function SocialIcon({ type }: { type: string }) {
 
 export default function Mentor() {
   return (
-    <section className="bg-white px-4 py-16 md:py-24">
+    <section className="bg-white px-4 py-16 md:py-24" id="mentors">
       <div className="mx-auto max-w-[1430px]">
         <div className="rounded-3xl bg-black p-5 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] sm:p-10">
           <div className="mb-6 flex items-center gap-2 lg:mb-8">

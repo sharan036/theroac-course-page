@@ -1,4 +1,4 @@
-const logos = ["Bubble", "Airtable", "OpenAI", "Anthropic", "Zapier", "Stripe"];
+const logos = ["Bubble", "Airtable", "OpenAI", "Anthropic", "Zapier", "Razorpay"];
 
 export default function Brands() {
   return (

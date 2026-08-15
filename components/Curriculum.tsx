@@ -36,7 +36,7 @@ const modules = [
     week: "Week 4",
     chapters: [
       "Automation basics: triggers, actions, connecting two tools end to end (Zapier/Make/n8n)",
-      "Automation applied + payments basics: a real end-to-end automation for your capstone, plus a light no-code Stripe/Razorpay paywall overview",
+      "Automation applied + payments basics: a real end-to-end automation for your capstone, plus a light no-code Razorpay paywall overview",
     ],
   },
   {
@@ -103,7 +103,7 @@ export default function Curriculum() {
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Voiceflow / Botpress / Chatbase</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Stack AI / VectorShift</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Zapier / Make / n8n</span>
-          <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Stripe / Razorpay</span>
+          <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Razorpay</span>
         </div>
 
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-6">

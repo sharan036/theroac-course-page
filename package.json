@@ -1,5 +1,5 @@
 {
-  "name": "mindly-clone",
+  "name": "roac-event",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,10 +10,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.12.0",
+    "axios": "^1.19.0",
+    "jose": "^6.2.9",
+    "js-cookie": "^3.0.8",
     "lucide-react": "^1.29.0",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-redux": "^9.3.0",
     "swiper": "^14.0.7"
   },
   "devDependencies": {

@@ -125,7 +125,7 @@ export default function BuildProjects() {
               description="Create an AI assistant that answers questions using your data."
               footer="Smart, context-aware responses"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between text-[#0e0f0a]">
                 <MiniStack
                   data={[
                     { icon: <FileText size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, text: "PDF" },
@@ -171,7 +171,7 @@ export default function BuildProjects() {
               <div className="flex justify-center">
                 <Arrow rotate={90} />
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:gap-3.5 border border-dashed p-2.5 sm:p-4 rounded-lg">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3.5 border border-dashed p-2.5 sm:p-5 rounded-lg text-[#0e0f0a]">
                 <Mini icon={<LayoutDashboard size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="App" />
                 <Mini icon={<FileSpreadsheet size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Sheet" />
                 <Mini icon={<Mail size={16} className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />} text="Email" />
@@ -197,7 +197,7 @@ export default function BuildProjects() {
               <div className="flex items-center justify-center">
                 <Arrow rotate={90} />
               </div>
-              <div className="flex items-center justify-center pb-6 sm:pb-14">
+              <div className="flex items-center justify-center pb-6 sm:pb-14 text-[#0e0f0a]">
                 <Mini icon={<RefreshCw size={18} className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />} text="Feedback Loop" />
               </div>
             </Card>
@@ -229,9 +229,11 @@ function Card({ number, title, description, footer, children }: CardProps) {
         {description}
       </p>
       { number === "01" ? (
-        <div className="my-8 flex-1 sm:my-13">{children}</div>
+        <div className="my-10 flex-1 sm:my-14">{children}</div>
       ): (number === "03") ? (
         <div className="my-5 flex-1">{children}</div>
+      ): (number === "04") ? (
+        <div className="my-5 flex-1 sm:mt-12 sm:mb-10">{children}</div>
       ): (
         <div className="my-5 flex-1 sm:my-10">{children}</div>
       )}
@@ -251,7 +253,9 @@ function Node({ icon, title, orange = false }: NodeProps) {
   return (
     <div
       className={`flex h-14 w-14 shrink-0 flex-col items-center justify-center gap-1 rounded-xl border text-center shadow-sm transition-all sm:h-20 sm:w-20 sm:gap-0 sm:rounded-2xl ${
-        orange ? "border-[#f08a34] bg-orange-50" : "border-zinc-300 bg-white"
+        orange
+          ? "border-[#f08a34] bg-orange-50 text-[#f08a34]"
+          : "border-zinc-300 bg-white text-zinc-900"
       }`}
     >
       {icon}
@@ -269,7 +273,7 @@ type MiniProps = {
 
 function Mini({ icon, text }: MiniProps) {
   return (
-    <div className="flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-2.5 text-xs font-medium shadow-sm sm:h-12 sm:gap-3 sm:rounded-xl sm:px-4 sm:text-[12px]">
+    <div className={`flex h-9 w-full min-w-0 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-2.5 text-xs font-medium shadow-sm sm:h-12 sm:gap-3 sm:rounded-xl sm:px-4 sm:text-[12px] ${text == 'Feedback Loop' &&'justify-center'}`}>
       {icon}
       <span className="truncate">{text}</span>
     </div>

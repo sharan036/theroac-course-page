@@ -1,3 +1,6 @@
+"use client";
+import { useRegisterModal } from "./RegisterModalContext";
+
 const features = [
   "Instant access to all live sessions, plus recordings if you miss one",
   "Pick and build your own capstone idea from Session 1 onward",
@@ -12,9 +15,10 @@ const highlights = [
   "Built for Working Professionals — Light Weekly Homework",
 ];
 
-const tools = ["Bubble", "Airtable", "ChatGPT", "Claude", "Voiceflow", "Chatbase", "Zapier", "Stripe"];
+const tools = ["Bubble", "Airtable", "ChatGPT", "Claude", "Voiceflow", "Chatbase", "Zapier", "Razorpay"];
 
 export default function Pricing() {
+  const { handleBookSeat } = useRegisterModal();
   return (
     <section id="pricing" className="bg-neutral-900 px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
@@ -29,8 +33,11 @@ export default function Pricing() {
 
         <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950/40 backdrop-blur sm:grid-cols-2">
           <div className="flex flex-col gap-6 p-8">
+            <p className="text-xs font-medium tracking-wide text-neutral-400">
+              QUICK OVERVIEW
+            </p>
             <ul className="flex flex-col gap-4">
-              {highlights.map((h) => (
+              {features.map((h) => (
                 <li key={h} className="flex items-start gap-3 text-sm text-white">
                   <span className="mt-0.5 text-[#ff6f00]">✓</span>
                   {h}
@@ -39,13 +46,10 @@ export default function Pricing() {
             </ul>
           </div>
 
-          <div className="flex flex-col gap-6 border-t border-white/10 p-8 sm:border-l sm:border-t-0">
+          <div className="flex flex-col gap-6 border-t border-white/10 p-8 sm:p-10 sm:border-l sm:border-t-0">
             <div className="flex flex-col gap-3">
-              <p className="text-xs font-medium tracking-wide text-neutral-400">
-                QUICK OVERVIEW
-              </p>
               <ul className="flex flex-col gap-3">
-                {features.map((f) => (
+                {highlights.map((f) => (
                   <li key={f} className="flex items-start gap-3 text-sm text-white">
                     <span className="mt-0.5 text-[#ff6f00]">✓</span>
                     {f}
@@ -53,12 +57,12 @@ export default function Pricing() {
                 ))}
               </ul>
             </div>
-            <a
-              href="#"
+            <button 
+              onClick={handleBookSeat}
               className="flex w-full items-center justify-center gap-3 rounded-lg bg-[#ff6f00] py-3 text-sm font-medium text-white"
             >
-              Book My Seat
-            </a>
+              Secure My Seat
+            </button>
           </div>
         </div>
 

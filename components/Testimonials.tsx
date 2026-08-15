@@ -13,15 +13,15 @@ const testimonials = [
     before:
       "\u201cEvery AI tutorial I followed ended in a Jupyter notebook, never a real app someone could actually use.\u201d",
     after:
-      "\u201cNow I have a working RAG chatbot with source citations, streaming responses, and a Stripe subscription gate.\u201d",
+      "\u201cNow I have a working RAG chatbot with source citations, streaming responses, and a Razorpay subscription gate.\u201d",
   },
   {
     name: "AI Product Builder",
     role: "Cohort Graduate",
     before:
-      "\u201cI was scared of PostgreSQL, Stripe webhooks, and production auth \u2014 I always shipped mock data instead.\u201d",
+      "\u201cI was scared of PostgreSQL, Razorpay webhooks, and production auth \u2014 I always shipped mock data instead.\u201d",
     after:
-      "\u201cI deployed a real multi-tenant SaaS with Clerk auth, a Postgres database, and live Stripe billing.\u201d",
+      "\u201cI deployed a real multi-tenant SaaS with Clerk auth, a Postgres database, and live Razorpay billing.\u201d",
   },
 ];
 

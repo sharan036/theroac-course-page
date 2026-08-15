@@ -76,7 +76,7 @@ function CenterGraphic() {
   return (
     <div
       className="absolute grid place-items-center"
-      style={{ left: "42.5%", top: "36%", width: "15%", aspectRatio: "1 / 1" }}
+      style={{ left: "45.5%", top: "36%", width: "15%", aspectRatio: "1 / 1" }}
     >
       <Image src="/center.svg" alt="" width={200} height={200} className="h-full w-full" />
     </div>
@@ -301,7 +301,7 @@ export default function Problems() {
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex flex-col items-center gap-4 text-center">
           <p className="text-xs font-semibold tracking-[0.18em] text-neutral-400 sm:text-sm">
-            SOUND FAMILIAR?
+            THE BUILDER'S LOOP
           </p>
           <h2 className="max-w-[830px] text-2xl font-extrabold leading-[1.2] tracking-tight text-black sm:text-3xl md:text-4xl lg:text-[42px] lg:leading-[1.15]">
             Does Your AI Product Idea Still Live
@@ -333,8 +333,8 @@ export default function Problems() {
             }}
           >
             <Image
-              src="/arrow-lines.png"
-              alt=""
+              src="/arrow-lines.svg"
+              alt="arrow"
               width={DESIGN_WIDTH}
               height={DESIGN_HEIGHT}
               priority

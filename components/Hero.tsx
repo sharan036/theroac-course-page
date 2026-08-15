@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Reveal from "./Reveal";
+import { useRegisterModal } from "./RegisterModalContext";
 
 const headshots = [
   "https://framerusercontent.com/images/GvIIYiCvs1fSYrsqT9kkYqRv4Y.jpg",
@@ -54,6 +55,7 @@ const BASELINE_INTERVAL_MS = 8 * 60 * 1000;
 const RESET_HOLD_MS = 5 * 60 * 1000; 
 
 export default function Hero() {
+  const { handleBookSeat } = useRegisterModal();
   const [messageIndex, setMessageIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -288,15 +290,15 @@ export default function Hero() {
 
           {/* CTA + SOCIAL PROOF */}
           <Reveal delay={280} duration={800} className="flex-col items-center gap-6 lg:flex-row">
-            <a
-              href="#pricing"
+            <button
+              onClick={handleBookSeat}
               className="flex items-center gap-4 rounded-lg bg-[#FF6F00] py-2 pr-2 pl-6 mt-3 text-lg font-medium text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.15)] transition-all duration-200 hover:scale-[1.02]"
             >
-              Book My Seat
+              Secure My Seat
               <span className="grid h-12 w-12 place-items-center rounded-md bg-white text-[#FF6F00]">
                 →
               </span>
-            </a>
+            </button>
 
             <div className="flex items-center mt-3">
               <p className="max-w-[220px] text-xs text-center uppercase leading-tight text-neutral-200 font-['Gloria_Hallelujah']">

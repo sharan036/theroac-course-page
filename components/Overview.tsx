@@ -1,3 +1,6 @@
+"use client";
+import { useRegisterModal } from "./RegisterModalContext";
+
 const points = [
   {
     title: "LIVE, NOT RECORDED",
@@ -14,6 +17,7 @@ const points = [
 ];
 
 export default function Overview() {
+  const { handleBookSeat } = useRegisterModal();
   return (
     <section className="bg-black px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
@@ -34,15 +38,15 @@ export default function Overview() {
               <h3 className="text-2xl font-medium leading-tight text-white sm:text-[23px]">
                 Live sessions, Wednesday / Saturday / Sunday, 2 hours each, across a 30-day window. No prior coding experience required. Every session builds directly on your own capstone idea, so by end of the cohort. you're not demoing a class exercise — you're demoing your own working AI product
               </h3>
-              <a
-                href="#pricing"
+              <button 
+                onClick={handleBookSeat}
                 className="flex w-fit items-center gap-3 rounded-lg bg-[#ff6f00] py-1 pr-2 pl-4 text-sm font-medium text-white"
               >
-                Book My Seat
+                Secure My Seat
                 <span className="grid h-9 w-9 place-items-center rounded-md bg-white text-[#ff6f00]">
                   →
                 </span>
-              </a>
+              </button>
             </div>
 
             <div className="flex flex-1 flex-col gap-6">

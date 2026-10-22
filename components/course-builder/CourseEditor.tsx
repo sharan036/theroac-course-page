@@ -302,3 +302,4 @@ export default function CourseEditor() {
       </div>
     </section>
   </div>;
+}

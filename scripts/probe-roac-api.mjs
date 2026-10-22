@@ -10,6 +10,7 @@ const paths = [
   "/api/health",
   "/api/courses",
   "/api/courses/no-code-simulation",
+  "/api/__roac_unknown_route_probe_20261022__",
   "/api-docs",
   "/swagger.json",
 ];

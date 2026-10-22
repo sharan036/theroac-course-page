@@ -57,7 +57,6 @@ export default function CourseLanding({ course, preview = false }: { course: Cou
       case "selection": return <section className="roac-section roac-alt" id={id} key={id}><div className="roac-shell">
         {intro(course.selection)}
         {cards(course.selection.items,true)}
-        <p className="roac-selection-notice">Applying does not guarantee admission. Selection is based on the internal assessment and eligibility criteria.</p>
       </div></section>;
       case "details": return <section className="roac-section" id={id} key={id}><div className="roac-shell">
         {intro(course.details)}
@@ -99,9 +98,7 @@ export default function CourseLanding({ course, preview = false }: { course: Cou
           <div className="roac-hero-actions">{apply(course.hero.cta)}</div>
           <p className="roac-fineprint">{isLinked ? course.hero.finePrint : "Application link is not configured yet. " + course.hero.finePrint}</p>
           <div className="roac-hero-stats">
-            <div><strong>30</strong><span>Days of Building</span></div>
-            <div><strong>30</strong><span>Selected Candidates</span></div>
-            <div><strong>0</strong><span>Prior Coding Required</span></div>
+            {course.hero.metrics.map((item,i)=><div key={i}><strong>{item.title}</strong><span>{item.description}</span></div>)}
           </div>
         </div>
       </section>

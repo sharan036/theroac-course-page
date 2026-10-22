@@ -16,7 +16,7 @@ export default function WhyChooseUs({ course }: {course?: Course}) {
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
           <p className="text-sm font-medium text-neutral-500">{course?.details.eyebrow || "Why choose us?"}</p>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-            {course ? course.details.title : <>A <span className="text-[#ff6f00]">Real Product</span> Speaks for Itself</>}
+            {course ? <>{course.details.title.split(" ").slice(0,-2).join(" ")} <span className="text-[#ff6f00]">{course.details.title.split(" ").slice(-2).join(" ")}</span></> : <>A <span className="text-[#ff6f00]">Real Product</span> Speaks for Itself</>}
           </h2>
         </div>
 

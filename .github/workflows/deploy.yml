@@ -1,67 +1,31 @@
-name: Deploy Next.js to GitHub Pages
+name: Verify Next.js for Vercel
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: "22"
           cache: npm
-
       - name: Install dependencies
         run: npm ci
-
-      - name: Build Next.js
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Production build
         run: npm run build
 
-      - name: Verify build output
-        run: |
-          ls -la out
-          ls -la out/_next/static
-          ls -la out/_next/static/chunks
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-  deploy:
-    needs: build
-
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+# Vercel handles deployment when GitHub receives pushes to main.
+# Static GitHub Pages cannot host the dynamic dashboard/API routes.

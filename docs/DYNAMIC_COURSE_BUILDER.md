@@ -60,6 +60,57 @@ fields. The editor may update a restricted text/metadata whitelist: `title`,
 Publication, user IDs, payments, prices, aggregates, and enrollments remain
 under existing backend admin workflows.
 
+
+## Verified frontend API base (22 Oct 2026)
+
+The existing frontend at `src/lib/api/client.ts` defines the API base as
+`process.env.NEXT_PUBLIC_API_URL || "https://api.theroac.com/api"`.
+The course server adapter now reuses that value, with the same production
+default. **You do not need a new backend or a second database.**
+
+```dotenv
+NEXT_PUBLIC_API_URL=https://api.theroac.com/api
+# Optional server-only override, leave unset for the same base:
+# ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
+
+# Still needed: use the exact HTTP routes from the course controller.
+# ROAC_COURSE_DETAIL_PATH=/ACTUAL_ROUTE/{slug}
+# ROAC_COURSE_UPDATE_PATH=/ACTUAL_ROUTE/{id}
+```
+
+The user provided `https://api.theroac.com/`, which is the host root.
+The `/api` prefix comes from the checked-in frontend configuration.
+
+### Live read-only API probe from GitHub Actions
+
+Run: `Check ROAC Public API Endpoints` on `feat/connect-roac-api`.
+The probe ran without authentication:
+
+| GET path | HTTP status |
+| --- | --- |
+| `/` | 404 |
+| `/api` | 401 |
+| `/api/health` | 401 |
+| `/api/courses` | 401 |
+| `/api/courses/no-code-simulation` | 401 |
+| `/api/__roac_unknown_route_probe_20261022__` (control) | 401 |
+| `/api-docs` | 404 |
+| `/swagger.json` | 404 |
+
+Because the purposely nonexistent control route also returned 401,
+these status codes **do not prove any course route exists**. An authentication
+layer or generic API router is rejecting anonymous requests before any
+route-specific response can be distinguished. Supply the existing backend
+course router/controller code, an authorized API specification, or a documented
+public GET endpoint before setting `ROAC_COURSE_DETAIL_PATH`. **Do not paste
+an admin token into the chat or into source control.** Do not use the existing
+`CourseEnrollment` endpoint for anonymous applications.
+
+The `cms-course-content` branch was restored after the earlier PR had been
+merged and branch cleanup removed it. The restored data was seeded from
+`data/course-default.json` on `main`. This is the editable page-design
+store, not a replacement for your Sequelize Course table.
+
 ## Runtime configuration — Vercel
 
 The existing frontend uses `NEXT_PUBLIC_API_URL` (previously

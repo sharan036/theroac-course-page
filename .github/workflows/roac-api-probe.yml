@@ -1,0 +1,26 @@
+name: Check ROAC Public API Endpoints
+
+on:
+  push:
+    branches: [feat/connect-roac-api]
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Probe read-only API endpoints
+        run: node scripts/probe-roac-api.mjs
+      - name: Install project dependencies
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build

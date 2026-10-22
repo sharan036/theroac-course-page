@@ -138,7 +138,6 @@ export async function getBackendAdminCourse(slug: string, token: string): Promis
 export function fromBackendCourse(page: Course, data: CourseDetail): Course {
   const model = data.course;
   const copy: Course = structuredClone(page);
-  copy.slug = model.slug;
   // Use subtitle for the hero; title remains the canonical Course title/slug.
   if (model.subtitle) copy.hero.title = model.subtitle;
   if (model.description) copy.hero.description = model.description;

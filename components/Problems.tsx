@@ -305,7 +305,7 @@ export default function Problems({ content }: { content?: { eyebrow: string; tit
             THE BUILDER'S LOOP
           </p>
           <h2 className="max-w-[830px] text-2xl font-extrabold leading-[1.2] tracking-tight text-black sm:text-3xl md:text-4xl lg:text-[42px] lg:leading-[1.15]">
-            {content ? content.title : <>Does Your AI Product Idea Still Live<br className="hidden sm:block" /><span className="text-[#F2600C]"> Only in Your Notes App?</span></>}
+            {content ? <>{content.title.includes(" but ") ? <>{content.title.split(" but ")[0]} <span className="text-[#F2600C]">but {content.title.split(" but ").slice(1).join(" but ")}</span></> : content.title}</> : <>Does Your AI Product Idea Still Live<br className="hidden sm:block" /><span className="text-[#F2600C]"> Only in Your Notes App?</span></>}
           </h2>
           <p className="max-w-[520px] text-sm text-neutral-500 sm:text-base">
             {content?.description || "It’s not a one-time setback. It’s a loop most builders get stuck in."}

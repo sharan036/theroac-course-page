@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import CourseLanding from "@/components/course-builder/CourseLanding";
+import BackendCoursePanel from "@/components/course-builder/BackendCoursePanel";
 import type { Course, CourseItem, SectionId, TextSection } from "@/lib/course-types";
 import { SECTION_LABELS, validateCourse } from "@/lib/course-types";
 
-type Tab = "content" | "design" | "sections" | "settings";
+type Tab = "content" | "design" | "sections" | "settings" | "backend";
 type SectionKey = "overview" | "weeks" | "projects" | "selection" | "details" | "faqs";
 
 function Field({ label, value, onChange, multiline = false, placeholder = "" }: {
@@ -214,7 +215,7 @@ export default function CourseEditor() {
         <a href={`/courses/${course.slug}`} target="_blank" rel="noreferrer">Open public course ↗</a>
       </div>
       <div className="roac-editor-tabs">
-        {(["content","design","sections","settings"] as Tab[]).map(key=><button key={key} className={tab===key?"active":""} onClick={()=>setTab(key)}>{({content:"Content",design:"Design",sections:"Sections",settings:"Settings"})[key]}</button>)}
+        {(["content","design","sections","settings","backend"] as Tab[]).map(key=><button key={key} className={tab===key?"active":""} onClick={()=>setTab(key)}>{({content:"Content",design:"Design",sections:"Sections",settings:"SEO & CTA",backend:"Course"})[key]}</button>)}
       </div>
       <div className="roac-editor-scroll">
         {tab==="content" && <>
@@ -274,6 +275,7 @@ export default function CourseEditor() {
             <div><button disabled={i===0} onClick={()=>move(i,-1)} title="Move up">↑</button><button disabled={i===course.sections.length-1} onClick={()=>move(i,1)} title="Move down">↓</button></div>
           </div>)}
         </div>}
+        {tab==="backend" && <BackendCoursePanel slug={course.slug} />}
         {tab==="settings" && <div className="roac-editor-fields">
           <h2>Search and Publishing</h2>
           <p className="roac-editor-hint">Course URL: /courses/{course.slug}</p>

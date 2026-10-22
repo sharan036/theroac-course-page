@@ -64,7 +64,7 @@ Public course: /courses/no-code-simulation
 Editor: /admin
 Original homepage: /
 
-To use backend mode: first create the ROAC 30-Day No Code Simulation course in the existing course administration system, add its sections and publish it. Confirm its slug is no-code-simulation. Then set ROAC_COURSE_BACKEND_ENABLED=true and redeploy the frontend. When enabled, absent/unpublished courses intentionally return 404.
+To use backend mode: first create the ROAC 30-Day No Code Simulation course in the existing course administration system, add its sections and publish it. The backend generates the Course.slug from its title, typically 30-days-no-code-simulation. The public landing page can remain /courses/no-code-simulation because its presentation configuration has backendSlug=30-days-no-code-simulation. Set that backendSlug to the actual saved Course.slug before enabling ROAC_COURSE_BACKEND_ENABLED=true and redeploying the frontend. When enabled, absent/unpublished courses intentionally return 404.
 
 The current separate cms-course-content GitHub branch is a temporary presentation store for colors, fonts, spacing, logos, FAQ, section layouts, CTA and campaign copy. It is not a second courses table. For fully database-backed design management, add a one-to-one CoursePageSettings model with courseId foreign key, JSON pageConfig, revisions and audit metadata. No backend migration has been applied.
 

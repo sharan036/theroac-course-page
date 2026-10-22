@@ -28,11 +28,12 @@ function Action({ course, label, compact = false, light = false }: {
 }) {
   const href = course.hero.ctaUrl;
   const good = validLink(href);
-  const classes = "inline-flex items-center justify-center gap-3 rounded-lg py-1 pr-2 pl-4 font-medium text-white transition hover:brightness-105 " +
+  const classes = "inline-flex items-center justify-center gap-3 py-1 pr-2 pl-4 font-medium text-white transition hover:brightness-105 " +
     (compact ? "text-sm" : "text-base sm:text-lg") +
     (good ? "" : " cursor-not-allowed opacity-60");
+  const shape = { borderRadius: "var(--course-button-radius)" };
   return good ? (
-    <a href={href} className={classes} style={{ background: "var(--course-accent)" }}
+    <a href={href} className={classes} style={{ background: "var(--course-accent)", ...shape }}
       target={href.startsWith("https://") ? "_blank" : undefined}
       rel={href.startsWith("https://") ? "noopener noreferrer" : undefined}>
       {label}
@@ -41,7 +42,7 @@ function Action({ course, label, compact = false, light = false }: {
     </a>
   ) : (
     <span className={classes} title="Application details will be announced" aria-disabled="true"
-      style={{ background: "var(--course-accent)" }}>
+      style={{ background: "var(--course-accent)", ...shape }}>
       {label}
       <span className="grid h-10 w-10 place-items-center rounded-md bg-white text-lg"
         style={{ color: "var(--course-accent)" }}>→</span>
@@ -49,7 +50,7 @@ function Action({ course, label, compact = false, light = false }: {
   );
 }
 
-function CourseNavbar({ course }: { course: Course }) {
+function CourseNavbar({ course, preview }: { course: Course; preview: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const options: Array<[SectionId, string]> = [
@@ -74,8 +75,8 @@ function CourseNavbar({ course }: { course: Course }) {
   return <>
     {mobileOpen && <button aria-label="Close navigation" onClick={()=>setMobileOpen(false)}
       className="fixed inset-0 z-[45] bg-black/40 backdrop-blur-sm md:hidden" />}
-    <div className={"fixed left-1/2 z-50 w-full -translate-x-1/2 px-4 transition-all duration-500 " +
-      (scrolled ? "top-3" : "top-6")}>
+    <div className={(preview ? "course-nav-preview sticky top-0 z-50 w-full px-4 " : "fixed left-1/2 z-50 w-full -translate-x-1/2 px-4 ") + "transition-all duration-500 " +
+      (preview ? "" : scrolled ? "top-3" : "top-6")}>
       <div className={"mx-auto rounded bg-white p-1 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.4)] transition-all duration-500 " +
         (scrolled ? "max-w-[920px]" : "max-w-[900px]")}>
         <nav aria-label="Course navigation" className="relative flex items-center justify-between overflow-hidden rounded">
@@ -86,7 +87,7 @@ function CourseNavbar({ course }: { course: Course }) {
                 className="max-w-[110px] object-contain" style={{height:scrolled ? 24:30,width:"auto"}} />
             ) : <span className="text-xl font-bold text-white">{course.brand.name}</span>}
           </a>
-          <div className="relative hidden flex-1 items-center justify-center md:flex">
+          <div className="course-nav-desktop relative hidden flex-1 items-center justify-center md:flex">
             {links.map(([id,label],index) => <div key={id} className="flex items-center">
               <a href={"#"+id} className="px-4 py-3 text-[15px] font-semibold text-[#111] transition-colors hover:text-[#ff6f00]">
                 {label}
@@ -96,16 +97,16 @@ function CourseNavbar({ course }: { course: Course }) {
           </div>
           {ctaVisible ? (
             <a href={course.hero.ctaUrl}
-              className="mr-2 hidden shrink-0 items-center gap-3 rounded-lg py-1 pr-2 pl-4 text-sm font-semibold text-white md:flex"
+              className="course-nav-cta mr-2 hidden shrink-0 items-center gap-3 rounded-lg py-1 pr-2 pl-4 text-sm font-semibold text-white md:flex"
               style={{background:"var(--course-accent)"}}>
               {course.hero.cta}
               <span className="grid h-9 w-9 place-items-center rounded-md bg-white"
                 style={{color:"var(--course-accent)"}}>→</span>
             </a>
-          ) : <span className="mr-2 hidden rounded-lg border border-orange-200 px-3 py-2 text-xs font-semibold text-neutral-600 md:block">
+          ) : <span className="course-nav-cta mr-2 hidden rounded-lg border border-orange-200 px-3 py-2 text-xs font-semibold text-neutral-600 md:block">
             Applications opening soon
           </span>}
-          <button type="button" className="mr-2 shrink-0 rounded-lg p-2 text-black md:hidden"
+          <button type="button" className="course-nav-hamburger mr-2 shrink-0 rounded-lg p-2 text-black md:hidden"
             onClick={()=>setMobileOpen(!mobileOpen)} aria-label={mobileOpen?"Close menu":"Open menu"}
             aria-expanded={mobileOpen}>
             {mobileOpen ? <span className="text-xl">×</span> : <span className="text-xl">☰</span>}
@@ -161,12 +162,13 @@ function CourseHero({ course }: { course: Course }) {
             {course.hero.eyebrow}</span>
         </Reveal>
         <Reveal delay={100} duration={800}>
-          <h1 className="max-w-[840px] text-center text-[clamp(38px,7vw,64px)] font-semibold leading-[0.98] tracking-[-0.04em] text-white">
+          <h1 className="max-w-[840px] text-center font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+            style={{fontSize:"clamp(38px,7vw,var(--course-hero-size))"}}>
             {course.hero.title}
           </h1>
         </Reveal>
         <Reveal delay={140} duration={800}>
-          <p className="max-w-[640px] text-center text-base text-neutral-200 sm:text-lg">
+          <p className="max-w-[640px] text-center text-base text-neutral-200 sm:text-lg" style={{fontSize:"var(--course-body-size)"}}>
             {course.hero.description}
           </p>
         </Reveal>
@@ -357,6 +359,9 @@ export default function CourseLanding({course,preview=false}:{course:Course;prev
   const style = {
     "--course-accent":t.accent,
     "--course-content-width":String(t.contentWidth)+"px",
+    "--course-hero-size":String(t.heroSize)+"px",
+    "--course-body-size":String(t.bodySize)+"px",
+    "--course-button-radius":t.buttonShape==="pill" ? "999px" : t.buttonShape==="square" ? "0px" : String(Math.max(6,Math.round(t.radius/2)))+"px",
     "--course-radius":String(t.radius)+"px",
     "--course-font":t.font === "dm-sans" ? '"DM Sans",sans-serif' :
       t.font === "system" ? "system-ui,sans-serif" : '"Inter",sans-serif',
@@ -377,7 +382,7 @@ export default function CourseLanding({course,preview=false}:{course:Course;prev
     }
   }
   return <div className="roac-original-page min-h-screen overflow-hidden" style={style} data-preview={preview?"true":undefined}>
-    <CourseNavbar course={course}/>
+    <CourseNavbar course={course} preview={preview}/>
     <main>
       <CourseHero course={course}/>
       {course.sections.filter(s=>s.visible).map(s=><div key={s.id} id={s.id} className="scroll-mt-[110px]">{section(s.id)}</div>)}

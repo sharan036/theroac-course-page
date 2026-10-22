@@ -74,7 +74,13 @@ The provided program brief specifies assessment-based selection for up to 30 can
 
 Run npm ci, npx tsc --noEmit and npm run build. The course builder runs on Vercel/Next.js server, not static GitHub Pages.
 
-A GitHub Actions read-only API probe received 401 for some /api URLs including a deliberately nonexistent route; that suggests a gateway/global middleware may reject anonymous requests before route handling. The exact Express paths above are confirmed against source code, but authenticated behavior on the deployed host has not been verified. Live integration must be checked with a genuine authorized instructor/admin account. Never paste credentials into PRs or chat.
+A GitHub Actions read-only API probe on 22 October 2026 confirmed:
+- GET /api/learn/courses returned HTTP 200 with JSON keys courses and pagination.
+- GET /api/learn/courses/no-code-simulation returned HTTP 404 with JSON key message. This slug is not available as a published course at the time of the probe.
+- GET /api/learn/dashboard/courses without bearer authorization returned 401.
+- A deliberately nonexistent /api route also returned 401, confirming that 401 alone does not establish route registration.
+
+The production server responds on the correct learning API path, but authenticated course editing remains untested until an instructor/admin logs in. Never paste credentials into PRs or chat.
 
 ## Backend issue to review separately
 

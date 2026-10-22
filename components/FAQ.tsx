@@ -52,7 +52,7 @@ export default function FAQ({ course }: {course?: Course}) {
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
           <p className="text-sm font-medium text-neutral-400">{course?.faqs.eyebrow || "FAQ"}</p>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl md:text-[38px]">
-            {course ? course.faqs.title : <>Frequently Asked <span className="text-[#ff6f00]">Questions</span></>}
+            {course ? <>{course.faqs.title.split(" ").slice(0,-1).join(" ")} <span className="text-[#ff6f00]">{course.faqs.title.split(" ").slice(-1).join("")}</span></> : <>Frequently Asked <span className="text-[#ff6f00]">Questions</span></>}
           </h2>
         </div>
 

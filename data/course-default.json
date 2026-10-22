@@ -12,16 +12,16 @@
   "theme": {
     "accent": "#ff6f00",
     "ink": "#131313",
-    "background": "#f6f5f2",
+    "background": "#ffffff",
     "surface": "#ffffff",
     "muted": "#616161",
     "font": "inter",
     "heroSize": 64,
     "bodySize": 16,
     "radius": 18,
-    "contentWidth": 1120,
+    "contentWidth": 1200,
     "sectionSpacing": 88,
-    "heroAlignment": "left",
+    "heroAlignment": "center",
     "buttonShape": "rounded"
   },
   "hero": {
@@ -226,11 +226,11 @@
       "visible": true
     },
     {
-      "id": "selection",
+      "id": "details",
       "visible": true
     },
     {
-      "id": "details",
+      "id": "selection",
       "visible": true
     },
     {

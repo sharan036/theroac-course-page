@@ -1,5 +1,7 @@
 "use client";
 
+import type { Course } from "@/lib/course-types";
+
 import {
   Database,
   User,
@@ -42,7 +44,8 @@ function Arrow({ rotate }: { rotate?: number }) {
   );
 }
 
-export default function BuildProjects() {
+export default function BuildProjects({course}:{course?:Course}) {
+  const projects = course?.projects.items;
   return (
     <section className="bg-black py-16 md:py-24 overflow-hidden">
       <div className="mx-auto max-w-[1500px] px-5 md:px-8">
@@ -52,18 +55,15 @@ export default function BuildProjects() {
             WHAT YOU'LL BUILD
           </p>
           <h2 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight text-white">
-            Real <span className="text-[#ff7f1f]">AI Projects.</span>
-            <br />
-            Not Just Theory.
+            {course ? course.projects.title : <>Real <span className="text-[#ff7f1f]">AI Projects.</span><br />Not Just Theory.</>}
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg md:text-xl leading-8 text-zinc-400">
-            You won't just learn AI — you'll build with it.
-            <br />
-            Ship real-world projects that make an impact.
+            {course ? course.projects.description : <>You won&apos;t just learn AI — you&apos;ll build with it.<br />Ship real-world projects that make an impact.</>}
           </p>
         </div>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
+          breakpointsBase={course ? "container" : "window"}
           loop
           autoplay={{
             delay: 3500,
@@ -98,8 +98,8 @@ export default function BuildProjects() {
           <SwiperSlide>
             <Card
               number="01"
-              title="AI SaaS Product"
-              description="Build a full-stack AI SaaS from idea to deployment."
+              title={projects?.[0]?.title || "AI SaaS Product"}
+              description={projects?.[0]?.description || "Build a full-stack AI SaaS from idea to deployment."}
               footer="End-to-end product you can ship"
             >
               <div className="flex items-center justify-between">
@@ -121,8 +121,8 @@ export default function BuildProjects() {
           <SwiperSlide>
             <Card
               number="02"
-              title="RAG-Powered Assistant"
-              description="Create an AI assistant that answers questions using your data."
+              title={projects?.[1]?.title || "RAG-Powered Assistant"}
+              description={projects?.[1]?.description || "Create an AI assistant that answers questions using your data."}
               footer="Smart, context-aware responses"
             >
               <div className="flex items-center justify-between text-[#0e0f0a]">
@@ -154,8 +154,8 @@ export default function BuildProjects() {
           <SwiperSlide>
             <Card
               number="03"
-              title="AI Agent Workflow"
-              description="Build autonomous agents that take action, use tools, and get work done."
+              title={projects?.[2]?.title || "AI Agent Workflow"}
+              description={projects?.[2]?.description || "Build autonomous agents that take action, use tools, and get work done."}
               footer="Agents that think, act & deliver"
             >
               <div className="flex items-center justify-center">
@@ -183,8 +183,8 @@ export default function BuildProjects() {
           <SwiperSlide>
             <Card
               number="04"
-              title="AI-Powered Feature"
-              description="Add intelligent features that users actually love."
+              title={projects?.[3]?.title || "AI-Powered Feature"}
+              description={projects?.[3]?.description || "Add intelligent features that users actually love."}
               footer="Ship features with real AI value"
             >
               <div className="flex items-center justify-between">

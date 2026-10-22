@@ -102,3 +102,31 @@
  .roac-detail { grid-template-columns:1fr; gap:5px; }
  .roac-card { padding:23px; }
 }
+
+
+/* Dynamic simulation: retain the original homepage styles, while allowing
+   selected colors to follow the Course Studio palette. */
+.roac-original-page [class*="text-[#ff6f00]"],
+.roac-original-page [class*="text-[#FF6F00]"],
+.roac-original-page [class*="text-[#F2600C]"],
+.roac-original-page [class*="text-[#ff7f1f]"],
+.roac-original-page [class*="text-[#ff8c33]"] { color: var(--course-accent) !important; }
+.roac-original-page [class*="bg-[#ff6f00]"],
+.roac-original-page [class*="bg-[#FF6F00]"] { background-color: var(--course-accent) !important; }
+.roac-original-page [class*="border-[#ff6f00]"] { border-color: var(--course-accent) !important; }
+.roac-original-page [class*="rounded-xl"]:not(.rounded-full) { border-radius: min(var(--course-radius,18px), 28px); }
+.roac-original-page section, .roac-original-page [id] { scroll-margin-top: 110px; }
+
+/* Preview is rendered inside a resizable editor panel. Treat a narrow panel
+   like a phone even when the editor window itself is desktop sized. */
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-nav-desktop,
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-nav-cta,
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-loop-desktop { display: none !important; }
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-nav-hamburger { display: block !important; }
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-loop-mobile { display:flex !important; }
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .course-hero-title { font-size: 38px !important; }
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .grid.sm\\:grid-cols-2,
+.roac-editor-previewframe.roac-preview-mobile .roac-original-page .grid.sm\\:grid-cols-3 { grid-template-columns:1fr !important; }
+@media (prefers-reduced-motion: reduce) {
+  .roac-original-page .animate-pulse { animation:none !important; }
+}

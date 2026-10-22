@@ -228,14 +228,14 @@ function LoopArrows() {
   );
 }
 
-function MobileLoop() {
+function MobileLoop({ waypoints = WAYPOINTS }: { waypoints?: Waypoint[] }) {
   return (
-    <div className="flex flex-col lg:hidden">
-      {WAYPOINTS.map((point, i) => {
+    <div className="course-loop-mobile flex flex-col lg:hidden">
+      {waypoints.map((point, i) => {
         const { Icon } = point;
         return (
           <div key={point.id} className="relative flex gap-3 pb-6 pl-1 sm:gap-4 sm:pb-8 sm:pl-2 last:pb-0">
-            {i !== WAYPOINTS.length - 1 && (
+            {i !== waypoints.length - 1 && (
               <span className="absolute left-[21px] top-8 h-[calc(100%-1rem)] border-l-2 border-dashed border-[#F2600C]/40 sm:left-[25px] sm:top-9 sm:h-[calc(100%-1.25rem)]" />
             )}
             <span className="relative mt-6 z-10 grid h-8 w-8 shrink-0 place-items-center rounded-md border-[1.5px] border-[#F2600C] bg-white text-[11px] font-bold text-[#F2600C] sm:mt-7 sm:h-9 sm:w-9 sm:text-xs">
@@ -293,8 +293,9 @@ function useScaleToFit(designWidth: number) {
   return { outerRef, scale };
 }
 
-export default function Problems() {
+export default function Problems({ content }: { content?: { eyebrow: string; title: string; description: string; items: string[] } }) {
   const { outerRef, scale } = useScaleToFit(DESIGN_WIDTH);
+  const waypoints = content ? WAYPOINTS.map((point,i) => ({...point,copy:content.items[i] || point.copy})) : WAYPOINTS;
 
   return (
     <section className="bg-white px-4 py-14 sm:py-16 md:py-24">
@@ -304,19 +305,17 @@ export default function Problems() {
             THE BUILDER'S LOOP
           </p>
           <h2 className="max-w-[830px] text-2xl font-extrabold leading-[1.2] tracking-tight text-black sm:text-3xl md:text-4xl lg:text-[42px] lg:leading-[1.15]">
-            Does Your AI Product Idea Still Live
-            <br className="hidden sm:block" />
-            <span className="text-[#F2600C]"> Only in Your Notes App?</span>
+            {content ? <>{content.title.includes(" but ") ? <>{content.title.split(" but ")[0]} <span className="text-[#F2600C]">but {content.title.split(" but ").slice(1).join(" but ")}</span></> : content.title}</> : <>Does Your AI Product Idea Still Live<br className="hidden sm:block" /><span className="text-[#F2600C]"> Only in Your Notes App?</span></>}
           </h2>
           <p className="max-w-[520px] text-sm text-neutral-500 sm:text-base">
-            It&apos;s not a one-time setback. It&apos;s a loop most builders get stuck in.
+            {content?.description || "It’s not a one-time setback. It’s a loop most builders get stuck in."}
           </p>
         </div>
 
         {/* Outer: real responsive width, height driven by the scaled inner box */}
         <div
           ref={outerRef}
-          className="relative mx-auto hidden w-full lg:block"
+          className="course-loop-desktop relative mx-auto hidden w-full lg:block"
           style={{
             maxWidth: DESIGN_WIDTH,
             height: DESIGN_HEIGHT * scale,
@@ -341,12 +340,12 @@ export default function Problems() {
               className="pointer-events-none absolute inset-0 h-full w-full object-fill"
             />
             <CenterGraphic />
-            {WAYPOINTS.map((point) => (
+            {waypoints.map((point) => (
               <WaypointCard key={point.id} point={point} />
             ))}
           </div>
         </div>
-        <MobileLoop />
+        <MobileLoop waypoints={waypoints} />
       </div>
     </section>
   );

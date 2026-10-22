@@ -1,3 +1,4 @@
+import type { Course } from "@/lib/course-types";
 const stats = [
   { title: "100% — Live Sessions", desc: "Every session is live — Wed/Sat/Sun, 2 hours each — with real-time building and feedback." },
   { title: "5 Weeks — One Continuous Capstone Build", desc: "Foundations → App Builder Mastery → AI Layer → Automation & Launch, all inside your own product." },
@@ -7,19 +8,20 @@ const stats = [
   { title: "1 Stress-Test — Know Your Limits, First-Hand", desc: "A dedicated exercise where you break your own build and learn exactly where no-code stops working for you. Plus, lifetime access to the program." },
 ];
 
-export default function WhyChooseUs() {
+export default function WhyChooseUs({ course }: {course?: Course}) {
+  const items = course ? course.details.items.map(item=>({title:item.title,desc:item.description})) : stats;
   return (
     <section id="why-choose-us" className="bg-white px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
-          <p className="text-sm font-medium text-neutral-500">Why choose us?</p>
+          <p className="text-sm font-medium text-neutral-500">{course?.details.eyebrow || "Why choose us?"}</p>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-            A <span className="text-[#ff6f00]">Real Product</span> Speaks for Itself
+            {course ? <>{course.details.title.split(" ").slice(0,-2).join(" ")} <span className="text-[#ff6f00]">{course.details.title.split(" ").slice(-2).join(" ")}</span></> : <>A <span className="text-[#ff6f00]">Real Product</span> Speaks for Itself</>}
           </h2>
         </div>
 
         <div className="grid grid-cols-1 divide-y divide-black/10 overflow-hidden rounded-2xl border border-black/10 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-3">
-          {stats.map((s, i) => (
+          {items.map((s, i) => (
             <div key={i} className="flex flex-col gap-3 p-8">
               <h3 className="text-lg font-medium text-black">{s.title}</h3>
               <p className="text-sm text-neutral-600">{s.desc}</p>

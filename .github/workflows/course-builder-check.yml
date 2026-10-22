@@ -33,3 +33,18 @@ jobs:
         run: npx tsc --noEmit
       - name: Production build
         run: npm run build
+      - name: Smoke test public course and protected API
+        run: |
+          npm run start -- -p 3000 > /tmp/roac-start.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 25); do
+            if curl --silent --show-error --fail --max-time 7 --output /tmp/roac-course.html http://127.0.0.1:3000/courses/no-code-simulation; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/roac-course.html
+          grep -q 'Zero Coding Required' /tmp/roac-course.html
+          api_code=$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/api/admin/course)
+          test "$api_code" = "401"

@@ -1,0 +1,231 @@
+{
+  "slug": "no-code-simulation",
+  "brand": {
+    "name": "ROAC",
+    "logoUrl": "/roac-logo-dark.png",
+    "logoAlt": "ROAC"
+  },
+  "seo": {
+    "title": "ROAC | 30 Days No Code Simulation",
+    "description": "30 days. One real product. Zero coding required. Apply for ROAC's assessment-based no-code simulation. Only 30 selected candidates; no program fee for selected candidates."
+  },
+  "theme": {
+    "accent": "#ff6f00",
+    "ink": "#131313",
+    "background": "#f6f5f2",
+    "surface": "#ffffff",
+    "muted": "#616161",
+    "font": "inter",
+    "heroSize": 64,
+    "bodySize": 16,
+    "radius": 18,
+    "contentWidth": 1120,
+    "sectionSpacing": 88,
+    "heroAlignment": "left",
+    "buttonShape": "rounded"
+  },
+  "hero": {
+    "eyebrow": "30-Day Simulation • No-Code Building • Only 30 Candidates",
+    "title": "30 Days. One Real Product. Zero Coding Required.",
+    "description": "An application-based simulation to help you build and ship a real-world, production-ready no-code product in 30 days.",
+    "tagline": "Move beyond tutorials. Build a product you can demonstrate.",
+    "cta": "Apply for the Simulation",
+    "ctaUrl": "",
+    "finePrint": "No program fee for selected candidates · Selection through assessment"
+  },
+  "challenge": {
+    "eyebrow": "THE BUILDER'S CHALLENGE",
+    "title": "Have a Product Idea but Haven't Built It Yet?",
+    "description": "Ideas are easy to imagine. Turning them into working products is where the real challenge begins.",
+    "items": [
+      "You have a product idea but don't know how to build it without coding.",
+      "You've tried no-code tools but haven't connected them into a working application.",
+      "You want to use AI in a product but don't know how to integrate it.",
+      "You want to build something real instead of watching another set of tutorials.",
+      "You need a focused timeline and a clear goal to move from idea to execution."
+    ]
+  },
+  "overview": {
+    "eyebrow": "INTRODUCING THE 30 DAYS NO CODE SIMULATION",
+    "title": "A Focused 30-Day Experience to Build and Ship a Real Product",
+    "description": "Work through the process of turning an idea into a functional no-code product. Learn by building, connect the tools you need, and work towards a project that you can demonstrate. No prior coding experience required. Only 30 candidates will be selected through an internal assessment.",
+    "features": [
+      {
+        "title": "BUILD BY DOING",
+        "description": "Work on a real product idea instead of completing disconnected exercises."
+      },
+      {
+        "title": "NO CODE, REAL FUNCTIONALITY",
+        "description": "Use no-code tools and AI integrations to create a functional application without writing code."
+      },
+      {
+        "title": "A PROJECT YOU CAN DEMONSTRATE",
+        "description": "Work towards a product that you can present, test and continue improving."
+      }
+    ]
+  },
+  "weeks": {
+    "eyebrow": "SIMULATION OVERVIEW",
+    "title": "30 Days. One Continuous Build.",
+    "description": "A structured building experience from product idea to working no-code project.",
+    "items": [
+      {
+        "title": "Week 1 — Idea & Foundations",
+        "description": "Define the problem, shape your product idea and understand the no-code tools."
+      },
+      {
+        "title": "Week 2 — Build the Application",
+        "description": "Create the core interface, structure and essential functionality."
+      },
+      {
+        "title": "Week 3 — AI & Integrations",
+        "description": "Add relevant AI features, connect services and automate workflows."
+      },
+      {
+        "title": "Week 4 — Test & Prepare to Ship",
+        "description": "Test your product, fix issues and prepare a working demonstration."
+      }
+    ]
+  },
+  "projects": {
+    "eyebrow": "WHAT YOU'LL BUILD",
+    "title": "Real Projects. Not Just Theory.",
+    "description": "Turn your idea into a functional product using no-code tools.",
+    "items": [
+      {
+        "title": "AI SaaS Product",
+        "description": "Build a no-code SaaS product from idea to a working deployment."
+      },
+      {
+        "title": "RAG-Powered Assistant",
+        "description": "Create an AI assistant that answers questions using your documents or data."
+      },
+      {
+        "title": "AI Agent Workflow",
+        "description": "Connect tools and automate workflows to help complete real tasks."
+      },
+      {
+        "title": "AI-Powered Feature",
+        "description": "Add an AI-powered feature that solves a specific user problem."
+      }
+    ]
+  },
+  "selection": {
+    "eyebrow": "HOW SELECTION WORKS",
+    "title": "Apply. Take the Assessment. Earn Your Place.",
+    "description": "Applying does not guarantee admission. Selection is based on the internal assessment and the program's eligibility criteria.",
+    "items": [
+      {
+        "title": "Submit Your Application",
+        "description": "Share details about yourself, your interests and what you want to build."
+      },
+      {
+        "title": "Complete the Internal Assessment",
+        "description": "Take the assessment conducted by ROAC as part of the selection process."
+      },
+      {
+        "title": "Get Shortlisted",
+        "description": "Only 30 candidates will be selected to participate in the 30 Days No Code Simulation."
+      }
+    ]
+  },
+  "details": {
+    "eyebrow": "PROGRAM DETAILS",
+    "title": "Everything You Need to Know",
+    "description": "A focused, assessment-based experience designed for aspiring builders.",
+    "items": [
+      {
+        "title": "Duration",
+        "description": "30 Days"
+      },
+      {
+        "title": "Cohort Size",
+        "description": "30 Candidates"
+      },
+      {
+        "title": "Entry Process",
+        "description": "Application + Internal Assessment"
+      },
+      {
+        "title": "Program Fee",
+        "description": "No fee for selected candidates"
+      },
+      {
+        "title": "Coding Experience",
+        "description": "Not required"
+      }
+    ]
+  },
+  "ctaSection": {
+    "eyebrow": "READY TO EARN YOUR PLACE?",
+    "title": "Only 30 candidates will be selected for the 30 Days No Code Simulation.",
+    "description": "Apply now, complete the assessment, and demonstrate your potential to build something real.",
+    "cta": "Apply for Selection",
+    "finePrint": "No program fee for selected candidates."
+  },
+  "faqs": {
+    "eyebrow": "FREQUENTLY ASKED QUESTIONS",
+    "title": "Your Questions, Answered",
+    "description": "",
+    "items": [
+      {
+        "title": "Is there a program fee?",
+        "description": "No. There is no program fee for the 30 candidates selected for this simulation."
+      },
+      {
+        "title": "Can anyone join the program?",
+        "description": "Anyone who meets the published eligibility criteria can apply. Admission is limited to candidates shortlisted through ROAC's internal assessment."
+      },
+      {
+        "title": "Do I need coding experience?",
+        "description": "No prior coding experience is required. The simulation is designed around no-code development."
+      },
+      {
+        "title": "Does applying guarantee a seat?",
+        "description": "No. All applicants must complete the selection process. Only 30 candidates will be admitted."
+      },
+      {
+        "title": "What will I build in 30 days?",
+        "description": "You will work towards building a functional no-code product, with a focus on testing and production readiness. The outcome depends on your project and completion of the program requirements."
+      },
+      {
+        "title": "Will I have to pay for tools separately?",
+        "description": "Any tool costs or third-party subscriptions, if applicable, will be communicated to candidates before participation."
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "challenge",
+      "visible": true
+    },
+    {
+      "id": "overview",
+      "visible": true
+    },
+    {
+      "id": "weeks",
+      "visible": true
+    },
+    {
+      "id": "projects",
+      "visible": true
+    },
+    {
+      "id": "selection",
+      "visible": true
+    },
+    {
+      "id": "details",
+      "visible": true
+    },
+    {
+      "id": "ctaSection",
+      "visible": true
+    },
+    {
+      "id": "faqs",
+      "visible": true
+    }
+  ]
+}

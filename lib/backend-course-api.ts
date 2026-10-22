@@ -5,8 +5,18 @@ type CourseDetail = { course: BackendCourse; sections: BackendCourseSection[]; c
 type UnknownObject = Record<string, unknown>;
 const object = (x: unknown): x is UnknownObject => Boolean(x && typeof x === "object" && !Array.isArray(x));
 
+/**
+ * Reuse the same API base URL as src/lib/api/client.ts. The root URL
+ * https://api.theroac.com/ serves the backend; application routes use /api.
+ * This is only the base, not evidence of any particular Course route.
+ */
+export const ROAC_API_BASE_URL =
+  process.env.ROAC_COURSE_BACKEND_BASE_URL?.trim() ||
+  process.env.NEXT_PUBLIC_API_URL?.trim() ||
+  "https://api.theroac.com/api";
+
 export function backendDetailConfigured() {
-  return Boolean(process.env.ROAC_COURSE_DETAIL_PATH && (process.env.ROAC_COURSE_BACKEND_BASE_URL || process.env.NEXT_PUBLIC_API_URL));
+  return Boolean(process.env.ROAC_COURSE_DETAIL_PATH);
 }
 export function backendUpdateConfigured() {
   return backendDetailConfigured() && Boolean(process.env.ROAC_COURSE_UPDATE_PATH && process.env.ROAC_BACKEND_ADMIN_TOKEN);
@@ -16,7 +26,7 @@ export function backendUpdateConfigured() {
  * The uploaded Sequelize models do not define any HTTP endpoint names.
  */
 function endpoint(pathTemplate: string, selector: "id" | "slug", value: string) {
-  const base = process.env.ROAC_COURSE_BACKEND_BASE_URL || process.env.NEXT_PUBLIC_API_URL;
+  const base = ROAC_API_BASE_URL;
   if (!base || !/^https?:\/\//.test(base)) throw new Error("Invalid backend base URL");
   if (!pathTemplate.startsWith("/") || pathTemplate.startsWith("//") || !pathTemplate.includes(`{${selector}}`)) {
     throw new Error(`ROAC_COURSE_${selector.toUpperCase()} path must contain {${selector}}`);

@@ -9,7 +9,7 @@
       },
       "seo": {
         "title": "ROAC | 30 Days No Code Simulation",
-        "description": "30 days. One real product. Zero coding required. Apply for ROAC's assessment-based no-code simulation. Only 30 selected candidates; no program fee for selected candidates."
+        "description": "Applications are open now for everyone. Join ROAC's 30-day No-Code Simulation for free. No assessment, payment or seat selection required."
       },
       "theme": {
         "accent": "#ff6f00",
@@ -27,25 +27,25 @@
         "buttonShape": "rounded"
       },
       "hero": {
-        "eyebrow": "30-Day Simulation • No-Code Building • Only 30 Candidates",
+        "eyebrow": "APPLICATIONS OPEN NOW • FREE FOR EVERYONE",
         "title": "30 Days. One Real Product. Zero Coding Required.",
-        "description": "An application-based simulation to help you build and ship a real-world, production-ready no-code product in 30 days.",
+        "description": "Register now and join ROAC's hands-on 30-day no-code simulation. Everyone is welcome—no assessment, selection process or course fee.",
         "tagline": "Move beyond tutorials. Build a product you can demonstrate.",
-        "cta": "Apply for the Simulation",
-        "ctaUrl": "",
-        "finePrint": "No program fee for selected candidates · Selection through assessment",
+        "cta": "Register & Enroll for Free",
+        "ctaUrl": "/courses/no-code-simulation/enroll",
+        "finePrint": "Applications open now · 100% free for everyone · No payment required",
         "metrics": [
           {
             "title": "30",
             "description": "Days of Building"
           },
           {
-            "title": "30",
-            "description": "Selected Candidates"
+            "title": "₹0",
+            "description": "Course Fee"
           },
           {
-            "title": "0",
-            "description": "Prior Coding Required"
+            "title": "Everyone",
+            "description": "Welcome to Join"
           }
         ]
       },
@@ -64,7 +64,7 @@
       "overview": {
         "eyebrow": "INTRODUCING THE 30 DAYS NO CODE SIMULATION",
         "title": "A Focused 30-Day Experience to Build and Ship a Real Product",
-        "description": "Work through the process of turning an idea into a functional no-code product. Learn by building, connect the tools you need, and work towards a project that you can demonstrate. No prior coding experience required. Only 30 candidates will be selected through an internal assessment.",
+        "description": "Build and ship a real no-code project in 30 days, with guided milestones and practical work. Open to everyone—no prior coding experience, selection assessment, or payment required.",
         "items": [
           {
             "title": "BUILD BY DOING",
@@ -127,21 +127,21 @@
         ]
       },
       "selection": {
-        "eyebrow": "HOW SELECTION WORKS",
-        "title": "Apply. Take the Assessment. Earn Your Place.",
-        "description": "Applying does not guarantee admission. Selection is based on the internal assessment and the program's eligibility criteria.",
+        "eyebrow": "HOW TO JOIN FOR FREE",
+        "title": "Register. Verify Your Email. Start Building.",
+        "description": "Applications are open now to everyone. Simply create your free ROAC account or sign in, then activate your free course enrollment.",
         "items": [
           {
-            "title": "Submit Your Application",
-            "description": "Share details about yourself, your interests and what you want to build."
+            "title": "Register for Free",
+            "description": "Sign up using your name, email address, mobile number and password, or sign in with your existing ROAC account."
           },
           {
-            "title": "Complete the Internal Assessment",
-            "description": "Take the assessment conducted by ROAC as part of the selection process."
+            "title": "Verify Your Email",
+            "description": "New members verify their email address and sign in. Returning members can continue immediately."
           },
           {
-            "title": "Get Shortlisted",
-            "description": "Only 30 candidates will be selected to participate in the 30 Days No Code Simulation."
+            "title": "Enroll for ₹0",
+            "description": "Confirm free enrollment—no payment details, gateway, coupon or selection assessment required."
           }
         ]
       },
@@ -155,16 +155,16 @@
             "description": "30 Days"
           },
           {
-            "title": "Cohort Size",
-            "description": "30 Candidates"
+            "title": "Who Can Join",
+            "description": "Open to Everyone"
           },
           {
-            "title": "Entry Process",
-            "description": "Application + Internal Assessment"
+            "title": "Registration",
+            "description": "Open Now · Free Account + Email Verification"
           },
           {
-            "title": "Program Fee",
-            "description": "No fee for selected candidates"
+            "title": "Course Fee",
+            "description": "₹0 — Free for Everyone"
           },
           {
             "title": "Coding Experience",
@@ -173,11 +173,11 @@
         ]
       },
       "ctaSection": {
-        "eyebrow": "READY TO EARN YOUR PLACE?",
-        "title": "Only 30 candidates will be selected for the 30 Days No Code Simulation.",
-        "description": "Apply now, complete the assessment, and demonstrate your potential to build something real.",
-        "cta": "Apply for Selection",
-        "finePrint": "No program fee for selected candidates."
+        "eyebrow": "APPLICATIONS OPEN NOW",
+        "title": "Free for Everyone. Your 30-Day No-Code Journey Starts Here.",
+        "description": "Join ROAC's practical no-code simulation. Create your free account, verify your email and enroll with zero payment.",
+        "cta": "Enroll Now — It's Free",
+        "finePrint": "₹0 course fee · No assessment · No payment gateway"
       },
       "faqs": {
         "eyebrow": "FREQUENTLY ASKED QUESTIONS",
@@ -186,19 +186,19 @@
         "items": [
           {
             "title": "Is there a program fee?",
-            "description": "No. There is no program fee for the 30 candidates selected for this simulation."
+            "description": "No. The entire 30-day No-Code Simulation course is free for everyone. No card details or payment are required."
           },
           {
             "title": "Can anyone join the program?",
-            "description": "Anyone who meets the published eligibility criteria can apply. Admission is limited to candidates shortlisted through ROAC's internal assessment."
+            "description": "Yes. Applications are open to everyone. Register for a ROAC account, verify your email and enroll for free."
           },
           {
             "title": "Do I need coding experience?",
             "description": "No prior coding experience is required. The simulation is designed around no-code development."
           },
           {
-            "title": "Does applying guarantee a seat?",
-            "description": "No. All applicants must complete the selection process. Only 30 candidates will be admitted."
+            "title": "Is there an assessment or selection process?",
+            "description": "No. Enrollment is open to everyone; there is no shortlist, assessment or limited-seat selection."
           },
           {
             "title": "What will I build in 30 days?",

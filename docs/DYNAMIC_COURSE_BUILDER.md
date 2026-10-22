@@ -1,197 +1,81 @@
-# ROAC Course Builder — existing Sequelize Course backend integration
+# ROAC Course Builder — existing backend integration
 
-This branch adds a dynamic page renderer and dashboard without changing the existing home page.
-The source files provided by the project owner are `Course.js`, `CourseCategory.js`, `CourseSection.js`, `CourseEnrollment.js`, and `models/index.js`. They define database field names and associations, **not API endpoint URLs or controller permissions**.
+Source: private sharan036/TheROAC, Server/src/app.js, routes/course.js, routes/dashboard.js, controllers/courseController.js, middleware/auth.js. Landing-page code: sharan036/theroac-course-page.
 
-## Pages
+## Exact Express routes (source code verified)
 
-- Public: `/courses/no-code-simulation`
-- Dashboard: `/admin`
-- Existing home page `/` remains unchanged.
+| Method | Path | Access |
+| --- | --- | --- |
+| GET | /api/learn/courses | Public: published and listed courses |
+| GET | /api/learn/courses/:slug | Optional auth: published course detail |
+| GET | /api/learn/dashboard/courses?search=slug | Instructor/admin JWT |
+| GET | /api/learn/dashboard/courses/:courseId | Instructor/admin JWT |
+| POST | /api/learn/courses | Authenticated instructor/admin |
+| PUT | /api/learn/courses/:id | Course owner or admin |
+| PATCH | /api/learn/courses/:id/publish | Course owner or admin |
+| GET | /api/learn/courses/:id/curriculum | Authenticated |
+| GET | /api/learn/courses/:courseId/sections | Authenticated |
+| POST | /api/learn/courses/:courseId/sections | Course owner/admin |
+| PUT | /api/learn/courses/:courseId/sections/:id | Course owner/admin |
 
-## Canonical data model
+Existing API base URL: https://api.theroac.com/api (already used by src/lib/api/client.ts).
 
-**Course** (`courses`) is the source of truth for:
-`id`, `title`, `slug`, `benefits`, `subtitle`, `description`, `thumbnail`,
-`previewVideo`, `instructorId`, `organizationId`, `categoryId`, `level`, `language`,
-`price`, `discountPrice`, `currency`, `isFree`, `status`, `isPublished`,
-`publishedAt`, `totalDurationMins`, `totalLessons`, `totalSections`,
-`totalEnrollments`, `totalRatings`, `averageRating`, `requirements`,
-`whatYouLearn`, `tags`, `targetAudience`, `hasCertificate`, `hasQuizzes`,
-`hasAssignments`, `accessDurationDays`, `isUnlisted`.
+Actual controller response shapes:
+- GET /api/learn/courses/:slug returns { course, isEnrolled }.
+- GET /api/learn/dashboard/courses returns { courses, pagination }.
+- GET /api/learn/dashboard/courses/:courseId returns { course, analytics, recentEnrollments, recentReviews }.
+- PUT /api/learn/courses/:id returns { message, course }.
 
-**CourseSection** (`course_sections`) supplies: `id`, `courseId`, `title`,
-`description`, `order`, `totalLessons`, `totalDurationMins`, `isPublished`.
-Published sections sorted by `order` can replace the page's curriculum cards.
+This frontend sends only whitelisted Course model fields to its editor and never relays learner analytics or enrollment rows to public pages.
 
-**CourseCategory** (`course_categories`) supplies course classification through `categoryId`.
-Display its `name` via the existing `category` association.
+## Security
 
-**CourseEnrollment** (`course_enrollments`) is separate from marketing pages. Its
-`userId`, `courseId`, `enrollmentType`, `amountPaid`, `progressPercent`,
-`lessonsCompleted`, `enrolledAt`, `expiresAt`, and `status` belong behind
-authenticated student/admin interfaces. **This public page never exposes enrollment rows.**
-`amountPaid` is in paise according to the supplied model; the `Course.price`
-unit must be confirmed with the backend controller before display.
+TheROAC uses Authorization: Bearer JWT authentication and enforces course instructor or administrator access via isInstructor. This frontend reads the existing auth_token cookie on the server and forwards it to the backend. The cookie is normally stored by the existing ROAC frontend on domain .theroac.com, so a Vercel preview or unrelated hostname will not receive it. If a separate deployment absolutely requires a server-side service credential, ROAC_BACKEND_ADMIN_TOKEN can be supplied as a secret. Prefer normal TheROAC administrator login; never expose a bearer token to browser JavaScript, commit files or logs.
 
-## How this branch integrates with backend data
+The standalone course-builder password is retained as an additional interim gate; a normal TheROAC authorized identity is still required by the backend. For production, replace the separate password with TheROAC SSO and role checks, with login throttling and audit trails.
 
-The opt-in adapter is `lib/backend-course-api.ts`. It uses the real backend's field
-names and supports a direct Course response, `{course,sections,category}`, or
-`{data:{course,sections,category}}`.
+GET /api/learn/courses/:slug includes only published course details; it does not include curriculum sections. Authenticated GET /api/learn/courses/:courseId/sections includes nested lessons and can contain lesson content and resources. Consequently the public landing page uses marketing-only week cards from its presentation store, never privileged lesson endpoints. The private dashboard shows redacted section metadata from the authenticated instructor detail API.
 
-Server-side GET of a configured course overlays:
-- `Course.subtitle` → landing hero heading (if supplied).
-- `Course.description` → landing hero description and SEO description.
-- `Course.title` → SEO title.
-- Published, ordered `CourseSection` rows → curriculum cards.
-- Course and category metadata → authenticated dashboard's **Course** tab.
+The backend changes a course slug when title changes. The Course editor keeps title read-only until a coordinated course/page slug-rename flow exists. Subtitle and description can be edited normally.
 
-**Public safety:** With backend mode enabled, the page is displayed only if
-`Course.status === "published"` AND `Course.isPublished === true`. If the
-backend cannot verify those flags, the public URL does not render the page.
-`isUnlisted` does not necessarily block a direct-link landing page; it controls
-catalog visibility at the backend level.
+## Deployment variables
 
-There is a separate **Course** tab at `/admin` which reads exact backend model
-fields. The editor may update a restricted text/metadata whitelist: `title`,
-`subtitle`, `description`, `thumbnail`, `previewVideo`, `benefits`,
-`requirements`, `whatYouLearn`, `tags`, `targetAudience`, `level`, `language`.
-Publication, user IDs, payments, prices, aggregates, and enrollments remain
-under existing backend admin workflows.
+    NEXT_PUBLIC_API_URL=https://api.theroac.com/api
+    # Optional server-only override if using a different backend hostname:
+    # ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
 
+    # Do not enable until the Course row exists and is published:
+    ROAC_COURSE_BACKEND_ENABLED=false
 
-## Verified frontend API base (22 Oct 2026)
+    ROAC_ADMIN_PASSWORD=<long unique admin password>
+    ROAC_ADMIN_SESSION_SECRET=<at least 32 random characters>
 
-The existing frontend at `src/lib/api/client.ts` defines the API base as
-`process.env.NEXT_PUBLIC_API_URL || "https://api.theroac.com/api"`.
-The course server adapter now reuses that value, with the same production
-default. **You do not need a new backend or a second database.**
+    # Course page branding/content (separate from SQL Course data)
+    ROAC_GITHUB_TOKEN=<fine-grained GitHub Contents read/write token>
+    ROAC_CMS_REPO=sharan036/theroac-course-page
+    ROAC_CMS_BRANCH=cms-course-content
 
-```dotenv
-NEXT_PUBLIC_API_URL=https://api.theroac.com/api
-# Optional server-only override, leave unset for the same base:
-# ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
+    # Optional fallback only when the .theroac.com session cookie cannot be received:
+    # ROAC_BACKEND_ADMIN_TOKEN=<existing authorized backend bearer token>
 
-# Still needed: use the exact HTTP routes from the course controller.
-# ROAC_COURSE_DETAIL_PATH=/ACTUAL_ROUTE/{slug}
-# ROAC_COURSE_UPDATE_PATH=/ACTUAL_ROUTE/{id}
-```
+The old guessed ROAC_COURSE_DETAIL_PATH, ROAC_COURSE_UPDATE_PATH and ROAC_COURSE_UPDATE_METHOD flags are no longer used. Code uses verified route patterns and PUT directly.
 
-The user provided `https://api.theroac.com/`, which is the host root.
-The `/api` prefix comes from the checked-in frontend configuration.
+Public course: /courses/no-code-simulation
+Editor: /admin
+Original homepage: /
 
-### Live read-only API probe from GitHub Actions
+To use backend mode: first create the ROAC 30-Day No Code Simulation course in the existing course administration system, add its sections and publish it. Confirm its slug is no-code-simulation. Then set ROAC_COURSE_BACKEND_ENABLED=true and redeploy the frontend. When enabled, absent/unpublished courses intentionally return 404.
 
-Run: `Check ROAC Public API Endpoints` on `feat/connect-roac-api`.
-The probe ran without authentication:
+The current separate cms-course-content GitHub branch is a temporary presentation store for colors, fonts, spacing, logos, FAQ, section layouts, CTA and campaign copy. It is not a second courses table. For fully database-backed design management, add a one-to-one CoursePageSettings model with courseId foreign key, JSON pageConfig, revisions and audit metadata. No backend migration has been applied.
 
-| GET path | HTTP status |
-| --- | --- |
-| `/` | 404 |
-| `/api` | 401 |
-| `/api/health` | 401 |
-| `/api/courses` | 401 |
-| `/api/courses/no-code-simulation` | 401 |
-| `/api/__roac_unknown_route_probe_20261022__` (control) | 401 |
-| `/api-docs` | 404 |
-| `/swagger.json` | 404 |
-
-Because the purposely nonexistent control route also returned 401,
-these status codes **do not prove any course route exists**. An authentication
-layer or generic API router is rejecting anonymous requests before any
-route-specific response can be distinguished. Supply the existing backend
-course router/controller code, an authorized API specification, or a documented
-public GET endpoint before setting `ROAC_COURSE_DETAIL_PATH`. **Do not paste
-an admin token into the chat or into source control.** Do not use the existing
-`CourseEnrollment` endpoint for anonymous applications.
-
-The `cms-course-content` branch was restored after the earlier PR had been
-merged and branch cleanup removed it. The restored data was seeded from
-`data/course-default.json` on `main`. This is the editable page-design
-store, not a replacement for your Sequelize Course table.
-
-## Runtime configuration — Vercel
-
-The existing frontend uses `NEXT_PUBLIC_API_URL` (previously
-`https://api.theroac.com/api` was its fallback); the server-side adapter can
-reuse it. Prefer a **server-only** `ROAC_COURSE_BACKEND_BASE_URL` if the internal
-host differs.
-
-```dotenv
-# Auth for THIS builder until integrated with the existing ROAC admin identity system.
-ROAC_ADMIN_PASSWORD=<long unique admin password>
-ROAC_ADMIN_SESSION_SECRET=<random secret of at least 32 characters>
-
-# Presentation JSON publishing (legacy interim storage)
-ROAC_GITHUB_TOKEN=<fine-grained GitHub Contents read/write token>
-ROAC_CMS_REPO=sharan036/theroac-course-page
-ROAC_CMS_BRANCH=cms-course-content
-
-# Course API integration (replace these example paths with your real controller routes)
-ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
-ROAC_COURSE_DETAIL_PATH=/courses/{slug}
-ROAC_COURSE_UPDATE_PATH=/courses/{id}
-ROAC_COURSE_UPDATE_METHOD=PATCH
-ROAC_BACKEND_ADMIN_TOKEN=<backend-authorized server-to-server credential>
-```
-
-The two endpoint paths above are **examples, not verified routes**. No
-controller, router, or API response sample was supplied. If they differ, set
-the templates to the route names actually used in your backend. The actual
-backend must authorize updates and validate all fields. If its authentication
-uses the ROAC login JWT/cookies instead of a service credential, wire that
-authorization into the Next.js server route; do not expose a privileged
-credential to the browser.
-
-Without `ROAC_COURSE_DETAIL_PATH`, the page uses the existing JSON presentation
-seed and the backend tab shows setup instructions. Without a verified update
-path/token, backend fields are displayed read-only.
-
-## Presentation settings
-
-The uploaded Sequelize models have **no fields for landing-page design**.
-This branch therefore keeps theme, page blocks, logo, colors, shapes, font sizes,
-hero text, layout and FAQs in `content/courses.json` on the
-`cms-course-content` branch. This is temporary presentation storage, not a
-second canonical courses table. Editing Page/Design/Sections publishes only
-presentation fields — backend Course records are **excluded** from that JSON.
-
-A future backend-only implementation should introduce a separate one-to-one
-`CoursePageSettings` model with `courseId` (UUID, FK to `courses.id`, unique),
-`pageConfig` (JSON), `revision` (integer), `updatedBy`, `createdAt`, and
-`updatedAt`. It should reuse the existing Course and CourseSection records,
-not clone them. Access control, optimistic locking, validation, and audit logs
-are required for production. Such a model and its endpoints are **not present
-in the five uploaded files**, and no database migration has been applied.
-
-When backend mode is enabled, a landing page can be created in the dashboard
-only after the same slug exists in the backend. The backend must also publish
-the course for the page to become publicly visible.
-
-## Course-specific admissions
-
-The supplied 30-Day No-Code Simulation brief says the cohort selects 30
-candidates via an assessment and **there is no program fee for selected
-candidates**. Do not turn this into open, instant enrollment or send applicants
-to the old paid registration modal. The correct assessment/application form URL
-must be configured separately; leaving it blank disables the CTA.
+The provided program brief specifies assessment-based selection for up to 30 candidates and no fee for those selected. Do not confuse Course.isFree with automatic selection/enrollment. The application CTA remains disabled until a verified assessment/application URL is supplied.
 
 ## Verification
 
-```sh
-npm ci
-npx tsc --noEmit
-npm run build
-```
+Run npm ci, npx tsc --noEmit and npm run build. The course builder runs on Vercel/Next.js server, not static GitHub Pages.
 
-GitHub Actions runs these commands for the draft PR. The frontend requires
-Vercel/Next.js server routes, not GitHub Pages static export. For live backend
-integration, test the real Course endpoints, published and draft gating,
-backend save authorization, changes to curriculum ordering, and response
-envelopes before merging.
+A GitHub Actions read-only API probe received 401 for some /api URLs including a deliberately nonexistent route; that suggests a gateway/global middleware may reject anonymous requests before route handling. The exact Express paths above are confirmed against source code, but authenticated behavior on the deployed host has not been verified. Live integration must be checked with a genuine authorized instructor/admin account. Never paste credentials into PRs or chat.
 
-Keep the admin password, JWT secret, backend token and GitHub token in
-server-only Vercel environment variables. The password-login is an interim
-dashboard gate; integrate existing admin SSO/role permissions and login rate
-limits before production.
+## Backend issue to review separately
+
+Server/src/controllers/courseSectionController.js listSections includes the Lesson content/resources attributes in its authenticated response even when the requestor is not an instructor or enrolled learner. Review and restrict those sensitive attributes in TheROAC before reusing that endpoint more broadly. Public landing pages MUST NOT call this endpoint.

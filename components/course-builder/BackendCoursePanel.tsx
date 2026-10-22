@@ -7,11 +7,11 @@ type BackendResponse =
   | { configured: false; writable: false; message: string }
   | { configured: true; writable: boolean; course: BackendCourse; sections: BackendCourseSection[]; category: BackendCourseCategory | null };
 
-function TextField({ name, value, onChange, multiline=false }: {
-  name: string; value: string; onChange: (value: string) => void; multiline?:boolean;
+function TextField({ name, value, onChange, multiline=false, readOnly=false }: {
+  name: string; value: string; onChange: (value: string) => void; multiline?:boolean; readOnly?:boolean;
 }) {
   return <label className="roac-editor-field"><span>{name}</span>
-    {multiline ? <textarea rows={3} value={value} onChange={e=>onChange(e.target.value)} /> : <input value={value} onChange={e=>onChange(e.target.value)}/>}
+    {multiline ? <textarea rows={3} value={value} onChange={e=>onChange(e.target.value)} /> : <input value={value} readOnly={readOnly} onChange={e=>onChange(e.target.value)}/>}
   </label>;
 }
 const listText = (values: string[] | undefined) => (values || []).join("\n");
@@ -43,7 +43,7 @@ export default function BackendCoursePanel({ slug }: { slug: string }) {
         setCategory(data.category);
         setSections(data.sections || []);
         setWritable(data.writable);
-        if(!data.writable)setNotice("Read-only: backend update route/token not configured. These are your existing Sequelize Course fields.");
+        if(!data.writable)setNotice("Read-only: sign in with an authorized TheROAC account to update course fields.");
       } catch { if(!cancelled)setNotice("Cannot reach your existing course backend."); }
       finally {if(!cancelled)setLoading(false);}
     })();
@@ -71,7 +71,7 @@ export default function BackendCoursePanel({ slug }: { slug: string }) {
   };
 
   if(loading)return <p className="roac-editor-hint">{notice}</p>;
-  if(!record || !draft)return <div className="roac-editor-fields"><h2>Existing Course Backend</h2><p className="roac-editor-alert">{notice}</p><p className="roac-editor-hint">The uploaded model files define database fields but not route URLs. Set the actual backend endpoint paths in Vercel before enabling this section.</p></div>;
+  if(!record || !draft)return <div className="roac-editor-fields"><h2>Existing Course Backend</h2><p className="roac-editor-alert">{notice}</p><p className="roac-editor-hint">The integration uses the routes in TheROAC/Server. Create the course in TheROAC and enable backend mode, then sign in as an authorized instructor or administrator.</p></div>;
 
   return <div className="roac-editor-fields">
     <h2>Existing Course Model</h2>
@@ -85,7 +85,7 @@ export default function BackendCoursePanel({ slug }: { slug: string }) {
       <div className="roac-editor-meta"><span>categoryId</span><strong>{category?.name || record.categoryId || "—"}</strong></div>
       <div className="roac-editor-meta"><span>instructorId</span><strong>{record.instructorId}</strong></div>
     </div>
-    <TextField name="title" value={draft.title} onChange={v=>edit("title",v)}/>
+    <TextField name="title (rename in main TheROAC dashboard)" value={draft.title} readOnly onChange={()=>{}}/>
     <TextField name="subtitle" value={draft.subtitle || ""} onChange={v=>edit("subtitle",v || null)}/>
     <TextField name="description" value={draft.description || ""} multiline onChange={v=>edit("description",v || null)}/>
     <TextField name="thumbnail" value={draft.thumbnail || ""} onChange={v=>edit("thumbnail",v || null)}/>
@@ -102,7 +102,7 @@ export default function BackendCoursePanel({ slug }: { slug: string }) {
     </div>
 
     <h2>CourseSection records</h2>
-    <p className="roac-editor-hint">These records come from CourseSection.js, ordered by the backend `order` field. Published sections are reflected on the public curriculum.</p>
+    <p className="roac-editor-hint">These records come from TheROAC instructor dashboard, ordered by the backend `order` field. The public landing page currently uses presentation curriculum text until a public section-summary endpoint is available.</p>
     {sections.length ? sections.slice().sort((a,b)=>a.order-b.order).map(section=><div className="roac-editor-item" key={section.id}>
       <strong>{section.order+1}. {section.title}</strong>
       <p className="roac-editor-hint">{section.description || ""}</p>

@@ -230,7 +230,7 @@ function LoopArrows() {
 
 function MobileLoop({ waypoints = WAYPOINTS }: { waypoints?: Waypoint[] }) {
   return (
-    <div className="flex flex-col lg:hidden">
+    <div className="course-loop-mobile flex flex-col lg:hidden">
       {waypoints.map((point, i) => {
         const { Icon } = point;
         return (
@@ -315,7 +315,7 @@ export default function Problems({ content }: { content?: { eyebrow: string; tit
         {/* Outer: real responsive width, height driven by the scaled inner box */}
         <div
           ref={outerRef}
-          className="relative mx-auto hidden w-full lg:block"
+          className="course-loop-desktop relative mx-auto hidden w-full lg:block"
           style={{
             maxWidth: DESIGN_WIDTH,
             height: DESIGN_HEIGHT * scale,

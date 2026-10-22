@@ -16,7 +16,7 @@
 .roac-editor-courseselect select {flex:1;min-width:0;font-size:13px;}
 .roac-editor-courseselect button {width:40px;font-weight:800;font-size:19px;}
 .roac-editor-coursebar a {font-size:12px;color:#ff9f58;display:inline-block;margin-top:11px;text-decoration:none;}
-.roac-editor-tabs {display:grid;grid-template-columns:repeat(4,1fr);padding:0 14px;border-bottom:1px solid #ffffff1b;}
+.roac-editor-tabs {display:grid;grid-template-columns:repeat(5,1fr);padding:0 10px;border-bottom:1px solid #ffffff1b;}
 .roac-editor-tabs button {padding:16px 3px;border:0;border-bottom:2px solid transparent;color:#92949e;background:none;font-size:12px;font-weight:700;}
 .roac-editor-tabs button.active {color:#fff;border-color:#ff6f00;}
 .roac-editor-scroll {overflow:auto;overscroll-behavior:contain;padding:20px 24px 40px;flex:1;}
@@ -86,3 +86,9 @@
 .roac-login-card button {width:100%;}
 @media(max-width:1060px){.roac-editor{grid-template-columns:minmax(320px,380px) minmax(0,1fr);}.roac-editor-previewwrap{padding:12px;}}
 @media(max-width:760px){.roac-editor{height:auto;min-height:100dvh;display:flex;flex-direction:column;}.roac-editor-panel{min-height:600px;height:70dvh;}.roac-editor-previewside{height:80dvh;}.roac-editor-previewbar{padding:14px 18px;}.roac-editor-previewwrap{padding:12px;}}
+
+.roac-editor-meta {display:flex;gap:12px;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #ffffff17;padding:10px 0;font-size:12px;}
+.roac-editor-meta span {color:#a4a4af;min-width:100px;}
+.roac-editor-meta strong {color:#ededf2;text-align:right;font-size:12px;overflow-wrap:anywhere;}
+.roac-editor-fields .roac-editor-actionrow {padding:12px 0 18px;}
+.roac-editor-fields .roac-editor-actionrow>button {background:#ff6f00;border:0;border-radius:8px;padding:11px 14px;font-weight:700;color:white;}

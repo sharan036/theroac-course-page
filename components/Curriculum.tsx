@@ -1,3 +1,4 @@
+import type { Course } from "@/lib/course-types";
 "use client";
 
 import { useState } from "react";
@@ -84,19 +85,20 @@ function ModuleCard({ mod }: { mod: (typeof modules)[number] }) {
   );
 }
 
-export default function Curriculum() {
+export default function Curriculum({ course }: { course?: Course }) {
+  const displayModules = course ? course.weeks.items.map((item,i) => ({title:item.title,week:"Week " + (i+1),chapters:item.description.split(/\n+/).filter(Boolean)})) : modules;
   return (
     <section id="curriculum" className="bg-white px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[1200px]">
         <div className="mx-auto mb-12 flex max-w-[620px] flex-col items-center gap-4 rounded-xl border border-dashed border-neutral-300 py-12 text-center">
-          <p className="text-sm font-medium text-neutral-500">Curriculum Overview</p>
+          <p className="text-sm font-medium text-neutral-500">{course?.weeks.eyebrow || "Curriculum Overview"}</p>
           <h2 className="max-w-[600px] px-4 text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-            Live Sessions. One Real{" "}
-            <span className="text-[#ff6f00]">AI Product</span>, Built Week by Week.
+            {course ? course.weeks.title : <>Live Sessions. One Real{" "}<span className="text-[#ff6f00]">AI Product</span>, Built Week by Week.</>}
           </h2>
         </div>
 
-        <div className="mx-auto mb-8 flex flex-wrap justify-center gap-2 text-center text-xs text-neutral-500">
+        {course?.weeks.description && <p className="mx-auto mb-7 max-w-[700px] text-center text-sm text-neutral-500">{course.weeks.description}</p>}
+        {!course && <div className="mx-auto mb-8 flex flex-wrap justify-center gap-2 text-center text-xs text-neutral-500">
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Bubble / Glide / Adalo</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Airtable / Google Sheets</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">ChatGPT & Claude</span>
@@ -104,10 +106,10 @@ export default function Curriculum() {
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Stack AI / VectorShift</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Zapier / Make / n8n</span>
           <span className="rounded-full bg-[#f2f1ee] px-3 py-1.5">Razorpay</span>
-        </div>
+        </div>}
 
         <div className="mx-auto grid max-w-[1100px] grid-cols-1 gap-6">
-          {modules.map((mod) => (
+          {displayModules.map((mod) => (
             <ModuleCard key={mod.title} mod={mod} />
           ))}
         </div>

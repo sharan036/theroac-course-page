@@ -2,12 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAdmin, sameOrigin } from "@/lib/course-auth";
 import { loadCatalog, publishCourse } from "@/lib/course-store";
 import { validateCourse } from "@/lib/course-types";
+import { backendDetailConfigured } from "@/lib/backend-course-api";
 
 export const dynamic = "force-dynamic";
 export async function GET() {
   if (!(await isAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const catalog = await loadCatalog();
-  return NextResponse.json(catalog, { headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json({ ...catalog, backendConfigured: backendDetailConfigured() }, { headers: { "Cache-Control": "no-store" } });
 }
 export async function POST(request: NextRequest) {
   if (!(await isAdmin())) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

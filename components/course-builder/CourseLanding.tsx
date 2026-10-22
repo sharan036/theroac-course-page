@@ -126,6 +126,15 @@ function CourseNavbar({ course, preview }: { course: Course; preview: boolean })
   </>;
 }
 
+function AccentHeadline({ value }: { value: string }) {
+  const separator = value.lastIndexOf(". ");
+  if (separator > 0 && separator < value.length - 3)
+    return <>{value.slice(0,separator+2)}<span style={{color:"var(--course-accent)"}}>{value.slice(separator+2)}</span></>;
+  const words = value.split(/\\s+/);
+  if (words.length < 4) return <>{value}</>;
+  return <>{words.slice(0,-3).join(" ")} <span style={{color:"var(--course-accent)"}}>{words.slice(-3).join(" ")}</span></>;
+}
+
 function CourseHero({ course }: { course: Course }) {
   const messages = course.projects.items.map(x=>x.description).filter(Boolean);
   const [messageIndex,setMessageIndex] = useState(0);
@@ -164,7 +173,7 @@ function CourseHero({ course }: { course: Course }) {
         <Reveal delay={100} duration={800}>
           <h1 className="course-hero-title max-w-[840px] text-center font-semibold leading-[0.98] tracking-[-0.04em] text-white"
             style={{fontSize:"clamp(38px,7vw,var(--course-hero-size))"}}>
-            {course.hero.title}
+            <AccentHeadline value={course.hero.title}/>
           </h1>
         </Reveal>
         <Reveal delay={140} duration={800}>
@@ -217,7 +226,7 @@ function SectionHeading({ eyebrow,title,description,dark=false }: {
   return <div className="mb-10 flex flex-col items-center gap-4 text-center">
     <p className={"text-sm font-medium "+(dark?"text-neutral-400":"text-neutral-500")}>{eyebrow}</p>
     <h2 className={"max-w-[830px] text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[38px] "+
-      (dark?"text-white":"text-black")}>{title}</h2>
+      (dark?"text-white":"text-black")}><AccentHeadline value={title}/></h2>
     {description && <p className={"max-w-[680px] text-sm leading-7 sm:text-base "+(dark?"text-neutral-400":"text-neutral-500")}>
       {description}</p>}
   </div>;
@@ -270,7 +279,7 @@ function CourseSelection({course}:{course:Course}) {
           {course.selection.eyebrow}
         </span>
         <h2 className="max-w-[900px] text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl md:text-[38px]">
-          {course.selection.title}
+          <AccentHeadline value={course.selection.title}/>
         </h2>
         <p className="max-w-[760px] text-neutral-400">{course.selection.description}</p>
       </div>
@@ -308,7 +317,7 @@ function CourseCTA({course}:{course:Course}) {
     <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-8 text-center">
       <p className="text-sm font-medium text-neutral-500">{x.eyebrow}</p>
       <h2 className="max-w-[730px] text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-        {x.title}
+        <AccentHeadline value={x.title}/>
       </h2>
       <p className="max-w-[580px] text-sm text-neutral-500">{x.description}</p>
       <Action course={course} label={x.cta} compact />

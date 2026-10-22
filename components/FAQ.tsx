@@ -1,3 +1,4 @@
+import type { Course } from "@/lib/course-types";
 "use client";
 
 import { useState } from "react";
@@ -41,21 +42,21 @@ const faqs = [
   },
 ];
 
-export default function FAQ() {
+export default function FAQ({ course }: {course?: Course}) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section id="faqs" className="bg-neutral-950 px-4 py-16 md:py-24">
       <div className="mx-auto max-w-[800px]">
         <div className="mb-10 flex flex-col items-center gap-4 text-center">
-          <p className="text-sm font-medium text-neutral-400">FAQ</p>
+          <p className="text-sm font-medium text-neutral-400">{course?.faqs.eyebrow || "FAQ"}</p>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl md:text-[38px]">
-            Frequently Asked <span className="text-[#ff6f00]">Questions</span>
+            {course ? course.faqs.title : <>Frequently Asked <span className="text-[#ff6f00]">Questions</span></>}
           </h2>
         </div>
 
         <div className="flex flex-col gap-1">
-          {faqs.map((f, i) => {
+          {(course ? course.faqs.items.map(item=>({q:item.title,a:item.description})) : faqs).map((f, i) => {
             const open = openIndex === i;
             return (
               <div key={f.q} className="overflow-hidden rounded bg-neutral-900">
@@ -82,7 +83,7 @@ export default function FAQ() {
           })}
         </div>
 
-        <div className="mt-10 flex flex-col items-center gap-6 text-center">
+        {!course && <div className="mt-10 flex flex-col items-center gap-6 text-center">
           <p className="text-neutral-400">Still got questions? Reach out — we&apos;re here to help.</p>
           <a
             href="#"
@@ -93,7 +94,7 @@ export default function FAQ() {
               →
             </span>
           </a>
-        </div>
+        </div>}
       </div>
     </section>
   );

@@ -229,6 +229,8 @@ export default function CourseEditor() {
             <Field label="Supporting text" value={course.hero.tagline} onChange={v=>edit("hero.tagline",v)}/>
             <Field label="Button label" value={course.hero.cta} onChange={v=>edit("hero.cta",v)}/>
             <Field label="Footnote" value={course.hero.finePrint} onChange={v=>edit("hero.finePrint",v)}/>
+            <div className="roac-editor-subhead"><strong>Hero metrics</strong><button onClick={()=>edit("hero.metrics",[...course.hero.metrics,{title:"Metric",description:"Description"}])}>+ Add</button></div>
+            {course.hero.metrics.map((item,i)=><ItemEditor key={i} item={item} index={i} onChange={(field,value)=>edit("hero.metrics",course.hero.metrics.map((m,j)=>i===j?{...m,[field]:value}:m))} onDelete={()=>edit("hero.metrics",course.hero.metrics.filter((_,j)=>j!==i))}/>)}
           </div>}
           {activeSection==="challenge" && <div className="roac-editor-fields">
             <h2>The Builder's Challenge</h2>

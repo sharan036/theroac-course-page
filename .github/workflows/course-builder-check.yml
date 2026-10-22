@@ -1,0 +1,35 @@
+name: Verify Dynamic Course Builder
+
+on:
+  push:
+    branches:
+      - feat/dynamic-course-builder
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/course-builder/**"
+      - "lib/course-*.ts"
+      - "data/course-default.json"
+      - "package*.json"
+      - ".github/workflows/course-builder-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build

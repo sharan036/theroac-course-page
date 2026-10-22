@@ -62,6 +62,7 @@ export default function BuildProjects({course}:{course?:Course}) {
         </div>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
+          breakpointsBase={course ? "container" : "window"}
           loop
           autoplay={{
             delay: 3500,

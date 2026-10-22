@@ -47,7 +47,7 @@ export default function CourseEditor() {
   const [sha, setSha] = useState<string | null>(null);
   const [source, setSource] = useState<"github" | "fallback">("fallback");
   const [tab, setTab] = useState<Tab>("content");
-  const [activeSection, setActiveSection] = useState<SectionKey | "challenge" | "hero">("hero");
+  const [activeSection, setActiveSection] = useState<SectionId | "hero">("hero");
   const [previewMobile, setPreviewMobile] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");

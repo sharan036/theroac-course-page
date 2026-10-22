@@ -60,6 +60,36 @@ fields. The editor may update a restricted text/metadata whitelist: `title`,
 Publication, user IDs, payments, prices, aggregates, and enrollments remain
 under existing backend admin workflows.
 
+
+## Verified frontend API base (22 Oct 2026)
+
+The existing frontend at `src/lib/api/client.ts` defines the API base as
+`process.env.NEXT_PUBLIC_API_URL || "https://api.theroac.com/api"`.
+The course server adapter now reuses that value, with the same production
+default. **You do not need a new backend or a second database.**
+
+```dotenv
+NEXT_PUBLIC_API_URL=https://api.theroac.com/api
+# Optional server-only override, leave unset for the same base:
+# ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
+
+# Still needed: use the exact HTTP routes from the course controller.
+# ROAC_COURSE_DETAIL_PATH=/ACTUAL_ROUTE/{slug}
+# ROAC_COURSE_UPDATE_PATH=/ACTUAL_ROUTE/{id}
+```
+
+The user provided `https://api.theroac.com/`, which is the host root.
+The `/api` prefix comes from the checked-in frontend configuration, not from
+verified live course route documentation. As of this edit, access to the
+public API host from the assistant's web/container environment is unavailable;
+the GitHub Actions read-only probe can independently report response status.
+Do not treat example course route templates as confirmed.
+
+The `cms-course-content` branch was restored after the earlier PR had been
+merged and branch cleanup removed it. The restored data was seeded from
+`data/course-default.json` on `main`. This is the editable page-design
+store, not a replacement for your Sequelize Course table.
+
 ## Runtime configuration — Vercel
 
 The existing frontend uses `NEXT_PUBLIC_API_URL` (previously

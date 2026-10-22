@@ -94,7 +94,7 @@ export default function Curriculum({ course }: { course?: Course }) {
         <div className="mx-auto mb-12 flex max-w-[620px] flex-col items-center gap-4 rounded-xl border border-dashed border-neutral-300 py-12 text-center">
           <p className="text-sm font-medium text-neutral-500">{course?.weeks.eyebrow || "Curriculum Overview"}</p>
           <h2 className="max-w-[600px] px-4 text-3xl font-semibold leading-tight tracking-tight text-black sm:text-4xl md:text-[38px]">
-            {course ? course.weeks.title : <>Live Sessions. One Real{" "}<span className="text-[#ff6f00]">AI Product</span>, Built Week by Week.</>}
+            {course ? <>{course.weeks.title.includes(". ") ? <>{course.weeks.title.split(". ")[0]}. <span className="text-[#ff6f00]">{course.weeks.title.split(". ").slice(1).join(". ")}</span></> : course.weeks.title}</> : <>Live Sessions. One Real{" "}<span className="text-[#ff6f00]">AI Product</span>, Built Week by Week.</>}
           </h2>
         </div>
 

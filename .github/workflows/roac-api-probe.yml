@@ -18,3 +18,9 @@ jobs:
           node-version: "22"
       - name: Probe read-only API endpoints
         run: node scripts/probe-roac-api.mjs
+      - name: Install project dependencies
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build

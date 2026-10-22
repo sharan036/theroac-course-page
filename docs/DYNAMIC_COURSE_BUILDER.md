@@ -79,11 +79,32 @@ NEXT_PUBLIC_API_URL=https://api.theroac.com/api
 ```
 
 The user provided `https://api.theroac.com/`, which is the host root.
-The `/api` prefix comes from the checked-in frontend configuration, not from
-verified live course route documentation. As of this edit, access to the
-public API host from the assistant's web/container environment is unavailable;
-the GitHub Actions read-only probe can independently report response status.
-Do not treat example course route templates as confirmed.
+The `/api` prefix comes from the checked-in frontend configuration.
+
+### Live read-only API probe from GitHub Actions
+
+Run: `Check ROAC Public API Endpoints` on `feat/connect-roac-api`.
+The probe ran without authentication:
+
+| GET path | HTTP status |
+| --- | --- |
+| `/` | 404 |
+| `/api` | 401 |
+| `/api/health` | 401 |
+| `/api/courses` | 401 |
+| `/api/courses/no-code-simulation` | 401 |
+| `/api/__roac_unknown_route_probe_20261022__` (control) | 401 |
+| `/api-docs` | 404 |
+| `/swagger.json` | 404 |
+
+Because the purposely nonexistent control route also returned 401,
+these status codes **do not prove any course route exists**. An authentication
+layer or generic API router is rejecting anonymous requests before any
+route-specific response can be distinguished. Supply the existing backend
+course router/controller code, an authorized API specification, or a documented
+public GET endpoint before setting `ROAC_COURSE_DETAIL_PATH`. **Do not paste
+an admin token into the chat or into source control.** Do not use the existing
+`CourseEnrollment` endpoint for anonymous applications.
 
 The `cms-course-content` branch was restored after the earlier PR had been
 merged and branch cleanup removed it. The restored data was seeded from

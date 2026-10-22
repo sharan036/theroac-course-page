@@ -1,0 +1,47 @@
+name: Verify No Code Simulation UI
+
+on:
+  push:
+    branches: [feat/no-code-simulation-homepage-ui]
+  pull_request:
+    paths:
+      - "components/course-builder/**"
+      - "components/Problems.tsx"
+      - "components/Curriculum.tsx"
+      - "components/FAQ.tsx"
+      - "components/WhyChooseUs.tsx"
+      - "components/IsThisForYou.tsx"
+      - "app/**"
+      - "data/course-default.json"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - name: Smoke test original homepage and styled simulation
+        run: |
+          npm run start -- -p 3000 > /tmp/roac-ui-start.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 25); do
+            if curl --silent --fail --output /tmp/home.html http://127.0.0.1:3000/ && curl --silent --fail --output /tmp/no-code.html http://127.0.0.1:3000/courses/no-code-simulation; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/home.html
+          test -s /tmp/no-code.html
+          grep -q '30 Days' /tmp/no-code.html
+          grep -q 'THE BUILDER' /tmp/no-code.html
+          grep -q 'ROAC' /tmp/no-code.html

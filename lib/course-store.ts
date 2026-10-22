@@ -43,7 +43,7 @@ export async function loadCourse(slug: string): Promise<Course | undefined> {
   // When backend mode is explicitly enabled, only published courses can go public.
   // Fail closed if the backend cannot confirm a course's publication state.
   try {
-    const detail = await getBackendCourse(slug);
+    const detail = await getBackendCourse(page.backendSlug || page.slug);
     if (!detail || detail.course.status !== "published" || detail.course.isPublished !== true) return undefined;
     return fromBackendCourse(page, detail);
   } catch {

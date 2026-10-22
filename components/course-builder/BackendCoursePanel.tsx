@@ -34,9 +34,9 @@ export default function BackendCoursePanel({ slug }: { slug: string }) {
       setLoading(true);setNotice("");setRecord(null);setDraft(null);setDirty(false);
       try {
         const res=await fetch(`/api/admin/backend-course?slug=${encodeURIComponent(slug)}`,{cache:"no-store"});
-        const data=await res.json() as BackendResponse | {error:string};
+        const data=await res.json() as BackendResponse & {error?:string};
         if(cancelled)return;
-        if(!res.ok){setNotice("error" in data ? data.error : "Unable to access course backend");return;}
+        if(!res.ok){setNotice(data.error || "Unable to access course backend");return;}
         if(!data.configured){setNotice(data.message);return;}
         setRecord(data.course);
         setDraft(toCourseUpdate(data.course));

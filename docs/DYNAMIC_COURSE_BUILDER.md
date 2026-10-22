@@ -1,82 +1,146 @@
-# ROAC Dynamic Course Builder
+# ROAC Course Builder — existing Sequelize Course backend integration
 
-This branch adds a reusable, mobile-friendly course landing page and a browser-based content/branding editor without touching the original home page.
+This branch adds a dynamic page renderer and dashboard without changing the existing home page.
+The source files provided by the project owner are `Course.js`, `CourseCategory.js`, `CourseSection.js`, `CourseEnrollment.js`, and `models/index.js`. They define database field names and associations, **not API endpoint URLs or controller permissions**.
 
-## URLs
+## Pages
 
-- Public course: `/courses/no-code-simulation`
-- Course dashboard: `/admin`
-- New courses created in the dashboard: `/courses/<slug>`
+- Public: `/courses/no-code-simulation`
+- Dashboard: `/admin`
+- Existing home page `/` remains unchanged.
 
-The first course uses the supplied ROAC **30 Days No Code Simulation** program copy. Selection is assessment-based and selected candidates pay no program fee. **Do not connect this page to the existing paid registration modal.**
+## Canonical data model
 
-## Architecture
+**Course** (`courses`) is the source of truth for:
+`id`, `title`, `slug`, `benefits`, `subtitle`, `description`, `thumbnail`,
+`previewVideo`, `instructorId`, `organizationId`, `categoryId`, `level`, `language`,
+`price`, `discountPrice`, `currency`, `isFree`, `status`, `isPublished`,
+`publishedAt`, `totalDurationMins`, `totalLessons`, `totalSections`,
+`totalEnrollments`, `totalRatings`, `averageRating`, `requirements`,
+`whatYouLearn`, `tags`, `targetAudience`, `hasCertificate`, `hasQuizzes`,
+`hasAssignments`, `accessDurationDays`, `isUnlisted`.
 
-```
-Browser /admin --HttpOnly admin session--> Next.js API routes
-Next.js API routes -- GitHub Contents API --> cms-course-content branch
-Browser /courses/[slug] <-- server-rendered latest data -- GitHub Contents API
-```
+**CourseSection** (`course_sections`) supplies: `id`, `courseId`, `title`,
+`description`, `order`, `totalLessons`, `totalDurationMins`, `isPublished`.
+Published sections sorted by `order` can replace the page's curriculum cards.
 
-- `data/course-default.json` is the read-only fallback for the seed course.
-- `content/courses.json` on branch `cms-course-content` stores all published course documents.
-- `lib/course-store.ts` fetches this JSON with `cache: "no-store"`. Published edits are visible without rebuilding the Next.js app.
-- The editor uses the same `CourseLanding` React component for live previews.
-- Code remains in `main` (after review); CMS data changes stay on a dedicated branch so normal code deployment isn't triggered.
+**CourseCategory** (`course_categories`) supplies course classification through `categoryId`.
+Display its `name` via the existing `category` association.
 
-## Vercel configuration
+**CourseEnrollment** (`course_enrollments`) is separate from marketing pages. Its
+`userId`, `courseId`, `enrollmentType`, `amountPaid`, `progressPercent`,
+`lessonsCompleted`, `enrolledAt`, `expiresAt`, and `status` belong behind
+authenticated student/admin interfaces. **This public page never exposes enrollment rows.**
+`amountPaid` is in paise according to the supplied model; the `Course.price`
+unit must be confirmed with the backend controller before display.
 
-Create these **server-side** variables in Vercel Project Settings → Environment Variables:
+## How this branch integrates with backend data
+
+The opt-in adapter is `lib/backend-course-api.ts`. It uses the real backend's field
+names and supports a direct Course response, `{course,sections,category}`, or
+`{data:{course,sections,category}}`.
+
+Server-side GET of a configured course overlays:
+- `Course.subtitle` → landing hero heading (if supplied).
+- `Course.description` → landing hero description and SEO description.
+- `Course.title` → SEO title.
+- Published, ordered `CourseSection` rows → curriculum cards.
+- Course and category metadata → authenticated dashboard's **Course** tab.
+
+**Public safety:** With backend mode enabled, the page is displayed only if
+`Course.status === "published"` AND `Course.isPublished === true`. If the
+backend cannot verify those flags, the public URL does not render the page.
+`isUnlisted` does not necessarily block a direct-link landing page; it controls
+catalog visibility at the backend level.
+
+There is a separate **Course** tab at `/admin` which reads exact backend model
+fields. The editor may update a restricted text/metadata whitelist: `title`,
+`subtitle`, `description`, `thumbnail`, `previewVideo`, `benefits`,
+`requirements`, `whatYouLearn`, `tags`, `targetAudience`, `level`, `language`.
+Publication, user IDs, payments, prices, aggregates, and enrollments remain
+under existing backend admin workflows.
+
+## Runtime configuration — Vercel
+
+The existing frontend uses `NEXT_PUBLIC_API_URL` (previously
+`https://api.theroac.com/api` was its fallback); the server-side adapter can
+reuse it. Prefer a **server-only** `ROAC_COURSE_BACKEND_BASE_URL` if the internal
+host differs.
 
 ```dotenv
-ROAC_ADMIN_PASSWORD=<a unique strong admin password>
-ROAC_ADMIN_SESSION_SECRET=<a random secret at least 32 characters>
-ROAC_GITHUB_TOKEN=<a fine-grained GitHub PAT>
+# Auth for THIS builder until integrated with the existing ROAC admin identity system.
+ROAC_ADMIN_PASSWORD=<long unique admin password>
+ROAC_ADMIN_SESSION_SECRET=<random secret of at least 32 characters>
+
+# Presentation JSON publishing (legacy interim storage)
+ROAC_GITHUB_TOKEN=<fine-grained GitHub Contents read/write token>
 ROAC_CMS_REPO=sharan036/theroac-course-page
 ROAC_CMS_BRANCH=cms-course-content
+
+# Course API integration (replace these example paths with your real controller routes)
+ROAC_COURSE_BACKEND_BASE_URL=https://api.theroac.com/api
+ROAC_COURSE_DETAIL_PATH=/courses/{slug}
+ROAC_COURSE_UPDATE_PATH=/courses/{id}
+ROAC_COURSE_UPDATE_METHOD=PATCH
+ROAC_BACKEND_ADMIN_TOKEN=<backend-authorized server-to-server credential>
 ```
 
-GitHub token: fine-grained token restricted to the ROAC repository, with **Contents: Read and Write**. Configure branch protection and store secrets only in Vercel environment settings; **never** commit them to GitHub, `NEXT_PUBLIC_*`, client components, or screenshots. For stronger production security, replace the single-password login with organization SSO, audit logging and per-IP login throttling (e.g., Vercel WAF).
+The two endpoint paths above are **examples, not verified routes**. No
+controller, router, or API response sample was supplied. If they differ, set
+the templates to the route names actually used in your backend. The actual
+backend must authorize updates and validate all fields. If its authentication
+uses the ROAC login JWT/cookies instead of a service credential, wire that
+authorization into the Next.js server route; do not expose a privileged
+credential to the browser.
 
-Read access to this public GitHub repository works without a token, but **dashboard publishing requires a token**. Without the password/secret, the dashboard displays setup instructions. Without the GitHub token, the public landing page still shows the seed course, but the Publish action fails safely.
+Without `ROAC_COURSE_DETAIL_PATH`, the page uses the existing JSON presentation
+seed and the backend tab shows setup instructions. Without a verified update
+path/token, backend fields are displayed read-only.
 
-## What can be edited
+## Presentation settings
 
-- Brand name, logo URL, logo alt, accent/foreground/background/surface/muted colors.
-- Font (Inter, DM Sans, system), hero/body font sizes, page width, section spacing, corner rounding, button shape and hero alignment.
-- Hero copy, footnote and hero statistics.
-- Challenge bullets; overview/features; curriculum weeks; project examples; assessment process; program details; FAQs; closing CTA.
-- Section visibility and order; SEO title/description.
-- Application URL (HTTPS or an internal relative path). Apply controls stay disabled until configured.
-- Multiple courses by duplicating the current course and giving it a unique slug.
+The uploaded Sequelize models have **no fields for landing-page design**.
+This branch therefore keeps theme, page blocks, logo, colors, shapes, font sizes,
+hero text, layout and FAQs in `content/courses.json` on the
+`cms-course-content` branch. This is temporary presentation storage, not a
+second canonical courses table. Editing Page/Design/Sections publishes only
+presentation fields — backend Course records are **excluded** from that JSON.
 
-The template controls the *available* layout elements. It is not yet a free-form drag-and-drop builder with arbitrary HTML or custom CSS.
+A future backend-only implementation should introduce a separate one-to-one
+`CoursePageSettings` model with `courseId` (UUID, FK to `courses.id`, unique),
+`pageConfig` (JSON), `revision` (integer), `updatedBy`, `createdAt`, and
+`updatedAt`. It should reuse the existing Course and CourseSection records,
+not clone them. Access control, optimistic locking, validation, and audit logs
+are required for production. Such a model and its endpoints are **not present
+in the five uploaded files**, and no database migration has been applied.
 
-## Review and deployment
+When backend mode is enabled, a landing page can be created in the dashboard
+only after the same slug exists in the backend. The backend must also publish
+the course for the page to become publicly visible.
 
-1. Open a pull request from `feat/dynamic-course-builder` into `main`. Do not merge until checked.
-2. Connect the GitHub project to Vercel if it is not already connected. **Do not use GitHub Pages** for this dynamic branch; the dashboard requires server-side API routes and a runtime.
-3. Add the environment variables above to the relevant Vercel environment(s).
-4. Preview `/courses/no-code-simulation` and log in to `/admin`. Update a word/color and Publish.
-5. Refresh the course URL to verify the change persists across clients.
-6. Set the real application URL once the assessment/application destination is ready.
-7. Keep the old homepage on `/` until you decide whether to replace it or redirect visitors.
+## Course-specific admissions
 
-## Local
+The supplied 30-Day No-Code Simulation brief says the cohort selects 30
+candidates via an assessment and **there is no program fee for selected
+candidates**. Do not turn this into open, instant enrollment or send applicants
+to the old paid registration modal. The correct assessment/application form URL
+must be configured separately; leaving it blank disables the CTA.
+
+## Verification
 
 ```sh
 npm ci
-npm run dev
 npx tsc --noEmit
 npm run build
 ```
 
-The Next.js page is dynamically rendered on the server; it must not be compiled with `output: "export"`.
+GitHub Actions runs these commands for the draft PR. The frontend requires
+Vercel/Next.js server routes, not GitHub Pages static export. For live backend
+integration, test the real Course endpoints, published and draft gating,
+backend save authorization, changes to curriculum ordering, and response
+envelopes before merging.
 
-## Operational notes
-
-- GitHub stores each published course update as a commit with version history.
-- Saves carry the previous GitHub blob SHA. If another editor published first, a conflict prompts reload instead of silently overwriting data.
-- The cookie is HTTP-only, SameSite=Strict, secure in production, signed via HMAC and expires after 12 hours.
-- Origin validation protects authenticated editing endpoints from cross-site requests.
-- No applicant information is collected or stored by this new page. Add a separate, consent-aware application form and backend workflow later.
+Keep the admin password, JWT secret, backend token and GitHub token in
+server-only Vercel environment variables. The password-login is an interim
+dashboard gate; integrate existing admin SSO/role permissions and login rate
+limits before production.

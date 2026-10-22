@@ -1,0 +1,93 @@
+{
+  "note": "BACKEND SEED TEMPLATE — replace instructorId with an existing User UUID and run via your existing authenticated Course controller. Do not submit this wrapper directly as a Course record.",
+  "Course": {
+    "title": "30 Days No Code Simulation",
+    "slug": "no-code-simulation",
+    "subtitle": "30 Days. One Real Product. Zero Coding Required.",
+    "description": "An application-based simulation to help selected participants build and ship a real-world, production-ready no-code product in 30 days.",
+    "benefits": [
+      "Build by doing with one continuous product idea",
+      "Use no-code tools and AI integrations for real functionality",
+      "Create a project you can present, test and keep improving"
+    ],
+    "thumbnail": null,
+    "previewVideo": null,
+    "instructorId": "REPLACE_WITH_VALID_EXISTING_USER_UUID",
+    "organizationId": null,
+    "categoryId": null,
+    "level": "beginner",
+    "language": "English",
+    "price": 0,
+    "discountPrice": null,
+    "currency": "INR",
+    "isFree": true,
+    "status": "draft",
+    "isPublished": false,
+    "publishedAt": null,
+    "totalDurationMins": 0,
+    "totalLessons": 0,
+    "totalSections": 4,
+    "requirements": [
+      "No prior coding experience required"
+    ],
+    "whatYouLearn": [
+      "Define a real product problem and shape a no-code solution",
+      "Build a core application interface and essential features",
+      "Integrate AI capabilities and third-party services",
+      "Test your product and prepare a working demonstration"
+    ],
+    "tags": [
+      "no-code",
+      "AI",
+      "30-day simulation",
+      "product building"
+    ],
+    "targetAudience": [
+      "Candidates who meet ROAC's published eligibility criteria",
+      "Applicants shortlisted through the internal assessment"
+    ],
+    "hasCertificate": false,
+    "hasQuizzes": false,
+    "hasAssignments": false,
+    "accessDurationDays": null,
+    "isUnlisted": true
+  },
+  "CourseSections": [
+    {
+      "title": "Week 1 — Idea & Foundations",
+      "description": "Define the problem, shape your product idea and understand the no-code tools.",
+      "order": 0,
+      "totalLessons": 0,
+      "totalDurationMins": 0,
+      "isPublished": true
+    },
+    {
+      "title": "Week 2 — Build the Application",
+      "description": "Create the core interface, structure and essential functionality.",
+      "order": 1,
+      "totalLessons": 0,
+      "totalDurationMins": 0,
+      "isPublished": true
+    },
+    {
+      "title": "Week 3 — AI & Integrations",
+      "description": "Add relevant AI features, connect services and automate workflows.",
+      "order": 2,
+      "totalLessons": 0,
+      "totalDurationMins": 0,
+      "isPublished": true
+    },
+    {
+      "title": "Week 4 — Test & Prepare to Ship",
+      "description": "Test your product, fix issues and prepare a working demonstration.",
+      "order": 3,
+      "totalLessons": 0,
+      "totalDurationMins": 0,
+      "isPublished": true
+    }
+  ],
+  "admissions": {
+    "publicNotice": "Only 30 candidates will be selected via assessment. No program fee for selected candidates.",
+    "guidance": "Course.isFree does not itself enforce the eligibility assessment. Do not auto-enroll all applicants; create CourseEnrollment only after accepted, according to your existing authorization flow."
+  }
+}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./course-builder.css";
+import "./course-editor.css";
 import ReduxProvider from "@/src/store/provider";
 
 export const metadata: Metadata = {

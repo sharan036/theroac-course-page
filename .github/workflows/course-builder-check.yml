@@ -1,0 +1,53 @@
+name: Verify Dynamic Course Builder
+
+on:
+  push:
+    branches:
+      - feat/dynamic-course-builder
+  pull_request:
+    paths:
+      - "app/**"
+      - "components/course-builder/**"
+      - "lib/course-*.ts"
+      - "data/course-default.json"
+      - "package*.json"
+      - ".github/workflows/course-builder-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build
+      - name: Smoke test public course and protected API
+        run: |
+          npm run start -- -p 3000 > /tmp/roac-start.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 25); do
+            if curl --silent --show-error --fail --max-time 7 --output /tmp/roac-course.html http://127.0.0.1:3000/courses/no-code-simulation; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/roac-course.html
+          grep -q 'Zero Coding Required' /tmp/roac-course.html
+          api_code=$(curl --silent --output /dev/null --write-out '%{http_code}' http://127.0.0.1:3000/api/admin/course)
+          test "$api_code" = "401"
+      - name: Show Next.js startup logs if smoke test fails
+        if: failure()
+        run: cat /tmp/roac-start.log || true

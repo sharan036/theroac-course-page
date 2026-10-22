@@ -1,9 +1,12 @@
+import type { BackendCourse, BackendCourseSection, BackendCourseCategory } from "@/lib/backend-course-types";
 export type SectionId = "challenge" | "overview" | "weeks" | "projects" | "selection" | "details" | "ctaSection" | "faqs";
 
 export type CourseItem = { title: string; description: string };
 export type TextSection = { eyebrow: string; title: string; description: string; items: CourseItem[] };
 export type Course = {
   slug: string;
+  /** Hydrated from the existing course backend; never saved into the presentation CMS JSON. */
+  backend?: { course: BackendCourse; sections: BackendCourseSection[]; category: BackendCourseCategory | null };
   brand: { name: string; logoUrl: string; logoAlt: string };
   seo: { title: string; description: string };
   theme: {

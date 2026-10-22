@@ -40,6 +40,7 @@ function ItemEditor({ item, index, onChange, onDelete }: {
 export default function CourseEditor() {
   const [authenticated, setAuthenticated] = useState(false);
   const [configured, setConfigured] = useState(true);
+  const [backendMode,setBackendMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
@@ -57,11 +58,12 @@ export default function CourseEditor() {
   const loadData = useCallback(async () => {
     const response = await fetch("/api/admin/course", { cache: "no-store" });
     if (!response.ok) { setMessage("Unable to load course configuration."); return; }
-    const data = await response.json() as { courses: Course[]; sha: string | null; source: "github" | "fallback" };
+    const data = await response.json() as { courses: Course[]; sha: string | null; source: "github" | "fallback"; backendConfigured?: boolean };
     setCourses(data.courses);
     setCourse(data.courses[0] || null);
     setSha(data.sha);
     setSource(data.source);
+    setBackendMode(Boolean(data.backendConfigured));
     setDirty(false);
   }, []);
 
@@ -114,20 +116,34 @@ export default function CourseEditor() {
     setCourse(courses.find(item => item.slug === slug) || null);
     setDirty(false); setMessage("");
   };
-  const duplicateCourse = () => {
+  const duplicateCourse = async () => {
     if (!course) return;
     const slug = window.prompt("Slug for the new course (e.g. ai-product-bootcamp):");
     if (!slug) return;
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || slug.length > 65 || courses.some(c=>c.slug === slug)) {
       setMessage("Use a unique lowercase slug with letters, numbers, and hyphens."); return;
     }
+    let backendTitle: string | undefined;
+    let backendSubtitle: string | undefined;
+    let backendDescription: string | undefined;
+    if (backendMode) {
+      // Do not allow a landing page for a course that does not exist in the canonical backend.
+      const result = await fetch(`/api/admin/backend-course?slug=${encodeURIComponent(slug)}`,{cache:"no-store"});
+      if (!result.ok) {setMessage("Create the course in your backend first; the slug must match an existing Course record.");return;}
+      const backend = await result.json();
+      if (!backend?.course?.id) {setMessage("Course record not found in the backend.");return;}
+      backendTitle=backend.course.title;
+      backendSubtitle=backend.course.subtitle;
+      backendDescription=backend.course.description;
+    }
     const next = JSON.parse(JSON.stringify(course)) as Course;
     next.slug = slug;
     next.seo.title = `${next.brand.name} | New Course`;
-    next.hero.title = "New Course Title";
+    next.hero.title = backendSubtitle || backendTitle || "New Course Title";
+    if (backendDescription) next.hero.description = backendDescription;
     next.hero.ctaUrl = "";
     setCourses(existing=>[...existing,next]);
-    setCourse(next);setDirty(true);setMessage("New course draft created. Edit the content and click Publish.");
+    setCourse(next);setDirty(true);setMessage(backendMode ? "Landing-page draft created for existing Course. Publish the page branding to activate it." : "New course draft created. Edit the content and click Publish.");
     setTab("content");setActiveSection("hero");
   };
 

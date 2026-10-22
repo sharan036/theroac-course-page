@@ -1,4 +1,5 @@
 import defaultCourse from "@/data/course-default.json";
+import { backendDetailConfigured, fromBackendCourse, getBackendCourse } from "@/lib/backend-course-api";
 import type { Course } from "@/lib/course-types";
 import { validateCourse } from "@/lib/course-types";
 
@@ -36,7 +37,18 @@ export async function loadCatalog(): Promise<Catalog> {
 }
 export async function loadCourse(slug: string): Promise<Course | undefined> {
   const catalog = await loadCatalog();
-  return catalog.courses.find(course => course.slug === slug);
+  const page = catalog.courses.find(course => course.slug === slug);
+  if (!page) return undefined;
+  if (!backendDetailConfigured()) return page;
+  // When backend mode is explicitly enabled, only published courses can go public.
+  // Fail closed if the backend cannot confirm a course's publication state.
+  try {
+    const detail = await getBackendCourse(slug);
+    if (!detail || detail.course.status !== "published" || detail.course.isPublished !== true) return undefined;
+    return fromBackendCourse(page, detail);
+  } catch {
+    return undefined;
+  }
 }
 export async function publishCourse(course: Course, expectedSha: string | null) {
   if (!process.env.ROAC_GITHUB_TOKEN) throw new Error("ROAC_GITHUB_TOKEN is missing");
@@ -45,7 +57,10 @@ export async function publishCourse(course: Course, expectedSha: string | null) 
   if (current.source !== "github" || !current.sha) throw new Error("CMS content could not be loaded");
   if (current.sha !== expectedSha) throw new Error("Conflict: course data changed. Reload the editor before publishing.");
   const next = current.courses.filter(item => item.slug !== course.slug);
-  next.push(course);
+  // Save design/presentation fields only. Course records come from the backend.
+  const { backend: ignored, ...presentation } = course;
+  void ignored;
+  next.push(presentation as Course);
   const body = {
     message: `content: publish course ${course.slug}`,
     content: Buffer.from(JSON.stringify({ courses: next }, null, 2) + "\n", "utf8").toString("base64"),

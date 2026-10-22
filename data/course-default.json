@@ -31,7 +31,21 @@
     "tagline": "Move beyond tutorials. Build a product you can demonstrate.",
     "cta": "Apply for the Simulation",
     "ctaUrl": "",
-    "finePrint": "No program fee for selected candidates · Selection through assessment"
+    "finePrint": "No program fee for selected candidates · Selection through assessment",
+    "metrics": [
+      {
+        "title": "30",
+        "description": "Days of Building"
+      },
+      {
+        "title": "30",
+        "description": "Selected Candidates"
+      },
+      {
+        "title": "0",
+        "description": "Prior Coding Required"
+      }
+    ]
   },
   "challenge": {
     "eyebrow": "THE BUILDER'S CHALLENGE",

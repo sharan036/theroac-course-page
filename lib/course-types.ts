@@ -14,7 +14,7 @@ export type Course = {
   };
   hero: {
     eyebrow: string; title: string; description: string; tagline: string;
-    cta: string; ctaUrl: string; finePrint: string;
+    cta: string; ctaUrl: string; finePrint: string; metrics: CourseItem[];
   };
   challenge: { eyebrow: string; title: string; description: string; items: string[] };
   overview: TextSection;
@@ -62,7 +62,7 @@ export function validateCourse(value: unknown): value is Course {
       || !range(t.contentWidth,720,1440) || !range(t.sectionSpacing,32,160)
       || !["left","center"].includes(t.heroAlignment) || !["rounded","pill","square"].includes(t.buttonShape)) return false;
   if (!c.hero || ![c.hero.eyebrow,c.hero.title,c.hero.description,c.hero.tagline,c.hero.cta,c.hero.finePrint].every((v) => text(v))
-      || !text(c.hero.ctaUrl,600) || (c.hero.ctaUrl && !validLink(c.hero.ctaUrl))) return false;
+      || !text(c.hero.ctaUrl,600) || !rows(c.hero.metrics) || (c.hero.ctaUrl && !validLink(c.hero.ctaUrl))) return false;
   if (!c.challenge || ![c.challenge.eyebrow,c.challenge.title,c.challenge.description].every(v => text(v))
       || !list(c.challenge.items) || !c.challenge.items.every(v => text(v))) return false;
   if (![c.overview,c.weeks,c.projects,c.selection,c.details,c.faqs].every(section)) return false;

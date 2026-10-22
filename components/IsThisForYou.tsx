@@ -1,5 +1,6 @@
-import type { Course } from "@/lib/course-types";
 "use client";
+
+import type { Course } from "@/lib/course-types";
 
 import {
   Database,

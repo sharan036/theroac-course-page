@@ -162,7 +162,7 @@ function CourseHero({ course }: { course: Course }) {
             {course.hero.eyebrow}</span>
         </Reveal>
         <Reveal delay={100} duration={800}>
-          <h1 className="max-w-[840px] text-center font-semibold leading-[0.98] tracking-[-0.04em] text-white"
+          <h1 className="course-hero-title max-w-[840px] text-center font-semibold leading-[0.98] tracking-[-0.04em] text-white"
             style={{fontSize:"clamp(38px,7vw,var(--course-hero-size))"}}>
             {course.hero.title}
           </h1>

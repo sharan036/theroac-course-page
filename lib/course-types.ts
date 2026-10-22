@@ -5,6 +5,8 @@ export type CourseItem = { title: string; description: string };
 export type TextSection = { eyebrow: string; title: string; description: string; items: CourseItem[] };
 export type Course = {
   slug: string;
+  /** The existing Sequelize Course.slug; may differ from the landing page URL. */
+  backendSlug?: string;
   /** Hydrated from the existing course backend; never saved into the presentation CMS JSON. */
   backend?: { course: BackendCourse; sections: BackendCourseSection[]; category: BackendCourseCategory | null };
   brand: { name: string; logoUrl: string; logoAlt: string };
@@ -58,6 +60,7 @@ export function validateCourse(value: unknown): value is Course {
   const range = (n: unknown, min: number, max: number) => typeof n === "number" && Number.isFinite(n) && n >= min && n <= max;
   const t = c.theme;
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(c.slug || "") || c.slug.length > 65) return false;
+  if (c.backendSlug !== undefined && (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(c.backendSlug) || c.backendSlug.length > 65)) return false;
   if (!c.brand || !text(c.brand.name, 100) || !text(c.brand.logoAlt, 100) || !text(c.brand.logoUrl, 600) || (c.brand.logoUrl && !validLink(c.brand.logoUrl))) return false;
   if (!c.seo || !text(c.seo.title, 200) || !text(c.seo.description, 700)) return false;
   if (!t || ![t.accent,t.ink,t.background,t.surface,t.muted].every(color) || !["inter","dm-sans","system"].includes(t.font)

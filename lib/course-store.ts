@@ -20,7 +20,7 @@ function headers(): HeadersInit {
   };
 }
 export async function loadCatalog(): Promise<Catalog> {
-  const fallback: Catalog = { courses: [defaultCourse as Course], sha: null, source: "fallback" };
+  const fallback: Catalog = { courses: [defaultCourse as unknown as Course], sha: null, source: "fallback" };
   try {
     const response = await fetch(`${apiUrl()}?ref=${encodeURIComponent(BRANCH)}`, { headers: headers(), cache: "no-store" });
     if (!response.ok) return fallback;
